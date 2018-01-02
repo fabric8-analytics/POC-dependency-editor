@@ -46,7 +46,7 @@ const initialMessages: Array<Message> = [
     sentAt: moment()
       .subtract(1, 'minutes')
       .toDate(),
-    text: `For Springboot application with CRUD operations, we suggest redis than memcache.`,
+    text: `Hi, I detected that you are looking to secure your application. I think you might be interested by depXXX instead of depYYY which is having less security issues reported over the last 6months.`,
     thread: tEcho
   }),
   new Message({
@@ -85,7 +85,7 @@ export class ChatExampleData {
   static setupBots(messagesService: MessagesService): void {
     // echo bot
     let response = '';
-    const q1 = ['tell', 'popular', 'more'];
+    const q1 = ['tell', 'popular'];
     const q2 = ['ok', 'do', 'change'];
     const quries = [q1, q2];
     messagesService
@@ -102,9 +102,10 @@ export class ChatExampleData {
             });
             if (matched){
               switch (q){
-                case q1: response = `It has no CVEs associated. <br/> Has very active community with over than 26K stars on gitHub`;
+                case q1: response = 'It is very active on github, the community is also very reactive - in general issues are responded in less than 12h';
                   break;
                 case q2: response = 'Done';
+
                   break;
               }
               messagesService.addMessage(
