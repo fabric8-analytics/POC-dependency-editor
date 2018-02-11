@@ -5,7 +5,8 @@ import {
   Input,
   Output,
   EventEmitter,
-  ViewEncapsulation
+  ViewEncapsulation,
+  ViewChild
 } from '@angular/core';
 import {
   TagInputModule
@@ -38,6 +39,8 @@ import {
   styleUrls: ['./dependency-editor.component.less']
 })
 export class DependencyEditorComponent implements OnInit {
+  @ViewChild('dependencyPreview') modalDependencyPreview : any;
+  
   public dependencies: Array < DependencySnapshotItem > ;
   public companions: Array < ComponentInformationModel > ;
   public licenseData: StackLicenseAnalysisModel;
@@ -119,5 +122,12 @@ export class DependencyEditorComponent implements OnInit {
       console.log('response after get cve call', response);
       this.cveData = response;
     });
+  }
+
+  public showDependencyModal(event: Event) {
+    this.modalDependencyPreview.open();
+  }
+  public closemodal(){
+    this.modalDependencyPreview.close();
   }
 }
