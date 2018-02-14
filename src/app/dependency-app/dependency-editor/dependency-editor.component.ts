@@ -42,18 +42,26 @@ import {
   styleUrls: ['./dependency-editor.component.less']
 })
 export class DependencyEditorComponent implements OnInit {
-  @ViewChild('previewModal') previewModal: any;
+  // @ViewChild('previewModal') previewModal: any;
+  @ViewChild('dependencyPreview') modalDependencyPreview : any;
+  
   public dependencies: Array < DependencySnapshotItem > ;
   public companions: Array < ComponentInformationModel > ;
   public licenseData: StackLicenseAnalysisModel;
   public cveData: CveResponseModel;
   public dependenciesAdded: Array < ComponentInformationModel > = [];
-
+  public packageLength: number = 0;
+  public addPackageLength: number = 0;
+  
   private stackUrl: string;
   private getDepInsightsUrl: string;
   private getCveUrl: string;
   private isDepSelectedFromSearch = false;
   private depToAdd: DependencySearchItem;
+  public listView: string = "View Dependency List";
+  private showList: boolean = false;
+  
+
 
   constructor(private service: DependencyEditorService) {}
 
@@ -177,7 +185,27 @@ export class DependencyEditorComponent implements OnInit {
     });
   }
 
-  showPreviewModal() {
-    this.previewModal.open();
+  // showPreviewModal() {
+  //   this.previewModal.open();
+  // }
+  public viewList() {
+    this.showList = !this.showList;
+    console.log("show list variable",this.showList);
+    if(this.showList === false) {
+      this.listView = "View Dependency List";
+    }
+    if(this.showList === true) {
+      this.listView = "Hide Dependency List";
+    }
+  }
+
+  public showDependencyModal(event: Event) {
+    this.modalDependencyPreview.open();
+    this.packageLength = DependencySnapshot.DEP_SNAPSHOT.length;
+    this.addPackageLength = DependencySnapshot.DEP_SNAPSHOT_ADDED.length;
+    console.log(this.packageLength,this.addPackageLength);
+  }
+  public closemodal(){
+    this.modalDependencyPreview.close();
   }
 }
