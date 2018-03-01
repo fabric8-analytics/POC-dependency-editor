@@ -37,6 +37,8 @@ export class DependencyEditorService {
     @Output() dependencySelected = new EventEmitter < DependencySearchItem > ();
     @Output() dependencyRemoved = new EventEmitter < EventDataModel > ();
 
+    public STACK_API_TOKEN;
+    public STACK_API_TOKEN_PROD;
     private headersProd: Headers = new Headers({
         'Content-Type': 'application/json'
     });
@@ -73,12 +75,13 @@ export class DependencyEditorService {
             // pass your token here to run in local
             this.headersProd.set('Authorization', 'Bearer ' + this.auth.getToken());
         } else {
-            this.headersProd.set('Authorization', 'Bearer ');
-            this.headersStage.set('Authorization', 'Bearer ');
+            this.headersProd.set('Authorization', 'Bearer ' );
+            this.headersStage.set('Authorization', 'Bearer ' );
         }
     }
 
     getStackAnalyses(url: string): Observable < any > {
+        console.log('header stage ->', this.headersStage);
         const options = new RequestOptions({
             headers: this.headersStage
         });
@@ -98,7 +101,7 @@ export class DependencyEditorService {
         });
         return this.http.get(url, options)
             .map(this.extractData)
-            .map((data) => {
+            .map((data) => {console.log('the data ',data);
                 return data;
             })
             .catch(this.handleError);
@@ -114,6 +117,30 @@ export class DependencyEditorService {
                 return data;
             })
             .catch(this.handleError);
+    }
+
+    getDependencyData1(url, payload): Observable < any > {
+        const options = new RequestOptions({
+            headers: this.headersProd
+        });
+        return this.http.post(url, payload, options)
+            .map(this.extractData)
+            .map((data: StackReportModel | CveResponseModel | any) => {
+                return data;
+            })
+            .catch(this.handleError);
+    }
+
+    getCategories(url: string): Observable < any > {
+        const options = new RequestOptions({
+            headers: this.headersStage
+        });
+        return this.http.get(url)// , options)
+        .map(this.extractData)
+        .map((data) => {
+            return data;
+        })
+        .catch(this.handleError);
     }
 
     updateDependencyAddedSnapshot(depObj: EventDataModel) {
