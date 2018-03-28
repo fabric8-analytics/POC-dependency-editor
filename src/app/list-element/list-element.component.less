@@ -1,13 +1,25 @@
+#list-start {
+    border-top:#ddd;
+    margin-left: 20px;
+    margin-right: 20px;
+}
 .list-group {
     border-bottom: 1px solid #ededed;
     border-top: none;
     margin-bottom: 0;
+    margin-top: 0;
     .list-view-pf-checkbox {
         border-radius: 3px;
         width: 11px;
         border: 1px solid #9e9e9e;
         height: 11px;
         margin-top: 34px;
+        .check-dep {
+            position: absolute;
+            top: 30px;
+            left: 15px;
+            width: 15px;
+        }
     }
     .list-view-pf-expand {
         font-size: 18px;
@@ -84,8 +96,37 @@
                 color: #6ba100;
                 text-align: left;
             }
+            #security {
+                font-family:OpenSans;
+                font-size:8px;
+                color:#545b64;
+            }
         }
     }
+    .reason {
+        margin-left: 55px;
+        margin-right: 72px;
+        margin-top: -30px;
+    }
+
+    .container-fluid {
+        border-top: none;
+        margin-left: 35px;
+        .row-table {
+            margin-left: auto;
+            td, th {
+                padding: 5px;
+            }
+            p {
+                .package-licence {
+                    font-weight: bold;
+                    padding-left: 5px;
+                    padding-right: 10px;
+                }
+            }
+        }
+    }
+
     & .alternate-dependency {
         .header {
             margin: 0 0 0 51px;
