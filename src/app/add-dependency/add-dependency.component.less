@@ -1,4 +1,8 @@
 .addDependecyComponent {
+
+    .no-padding {
+        padding: 0;
+    }
     background:#fff;
     .fit {
         height: auto;
@@ -184,11 +188,12 @@
                 width: 32%;
                 border: 1px solid #d1d1d1;
                 background: #fafafa;
-                height: 580px;
                 margin-top: 10px;
                 margin-left: -30px;
                 display: inline-block;
                 vertical-align: middle;
+                overflow-y: auto;
+                max-height: 650px;
                 .tag-list {
                     margin-top:0px;
                     .list-view-pf-actions {
@@ -233,15 +238,14 @@
                 width: 70%;
                 background: #fff;
                 border: 1px solid #d1d1d1;
-                height: 580px;
                 margin-top: 10px;
-                margin-left: -10px;
                 display: inline-block;
-                vertical-align: middle;
+                vertical-align: top;
+                overflow-y: auto;
+                max-height: 650px;
                 .depn {
                     overflow-y: auto;
                     overflow-x: hidden;
-                    height: 580px;
                     display: grid;
                     .depn-select {
                         padding: 20px;
@@ -274,7 +278,6 @@
                             }
                             .list-view-pf-description {
                                 padding: 15px 0 0 10px;
-                                width: unset;
                                 .list-group-item-heading {
                                     font-family: OpenSans-Bold;
                                     font-size: 15px;
@@ -288,6 +291,8 @@
                                         font-family: OpenSans-Bold;
                                         font-size: 14px;
                                         color: #545b64;
+                                        white-space: normal;
+                                        width: 100%;
                                     }
                                     .control--checkbox .control__indicator:after {
                                         left: 8px;
@@ -327,6 +332,7 @@
                                     color: #545b64;
                                     margin-right: 0;
                                     display: block;
+                                    text-align: left;
                                     .pficon-warning-triangle-o:before {
                                         font-family: PatternFlyIcons-webfont;
                                         color: #d0021b;
@@ -351,7 +357,7 @@
                                 .master-version {
                                     cursor: pointer;
                                     border-left: 1px solid #bbb;
-                                    padding-left: 0px;
+                                    padding-left: 10px;
                                     padding-right: 0px;
                                     .dropbtn:hover {
                                         background-color: #beedf9;

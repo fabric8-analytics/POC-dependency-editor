@@ -6,14 +6,16 @@ import { Component } from '@angular/core';
   templateUrl: './app.component.html'
 })
 export class AppComponent {
-  githubUrl = 'https://github.com/sara-02/testquickstart1';
-  boosterInfo = { 'mission': {
-                      'id': 'rest-http'
-                    },
-                    'runtime': {
-                      'id': 'vert.x',
-                      'name': 'Eclipse Vert.x',
-                      'version': 'redhat'
-                    }
-                  };
+  githubUrl = 'https://github.com/openshiftio-vertx-boosters/vertx-health-checks-booster-redhat';
+  boosterInfo = {
+    "mission": {
+      "id": "configmap"
+    },
+    "runtime": {
+      "id": "vert.x",
+      "name": "Eclipse Vert.x",
+      "version": "redhat"
+    }
+  };
+  githubRef = 'v12';
 }

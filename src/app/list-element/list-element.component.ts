@@ -47,6 +47,13 @@ export class ListElementComponent implements OnInit {
     }
   }
 
+  validateValues(value: any): string {
+    if (value < 0) {
+      return 'NA';
+    }
+    return value;
+  }
+
   changeTagname(saveTag: boolean) {
     this.saveTagname = !saveTag;
     this.dep.splice(0);

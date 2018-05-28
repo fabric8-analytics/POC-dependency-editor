@@ -40,6 +40,7 @@ import {
   DependencySnapshot
 } from '../utils/dependency-snapshot';
 import { FilterPipe } from './add-dependency.pipe';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'app-add-dependency',
@@ -77,8 +78,10 @@ export class AddDependencyComponent implements OnInit, OnDestroy, OnChanges {
   public noOfTags = 0;
   public saveTagname: Array<any> = [];
   public type = false;
-  public tags: Array < DependencySearchItem > = [];
+  public tags: Array < any > = [];
   public toast: boolean = false;
+
+  private addDependencySubscription: Subscription = null;
 
   constructor(
     private service: DependencyEditorService,
@@ -91,16 +94,22 @@ export class AddDependencyComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   getDependencies() {
+    if (!this.dependencySearchString) {
+      return;
+    }
     this.isLoading = true;
-    this.service.getDependencies(this.dependencySearchString)
-      .subscribe((response: any) => {
-        this.dependencySearchResult = response['result'];
-        this.isLoading = false;
-      }, (error: any) => {
-        // Handle server errors here
-        this.errorComponentSearch = this.errorMessageHandler.getErrorMessage(error.status);
-        console.log('error component search - ', this.errorComponentSearch);
-    });
+    if (this.addDependencySubscription) {
+      this.addDependencySubscription.unsubscribe();
+    }
+    this.addDependencySubscription = this .service.getDependencies(this.dependencySearchString)
+                                                  .subscribe((response: any) => {
+                                                    this.dependencySearchResult = response['result'];
+                                                    this.isLoading = false;
+                                                  }, (error: any) => {
+                                                    // Handle server errors here
+                                                    this.errorComponentSearch = this.errorMessageHandler.getErrorMessage(error.status);
+                                                    console.log('error component search - ', this.errorComponentSearch);
+                                                });
   }
 
   getCategories() {
@@ -220,13 +229,17 @@ export class AddDependencyComponent implements OnInit, OnDestroy, OnChanges {
     this.dependencySearchString = '';
     this.noOfTags = 0;
     this.saveTagname = [];
+    debugger;
+    let currentTag: any = null;
     for (let i = 0; i < this.masterTags.length; i++) {
-      if (this.masterTags[i].type === true) {
+      currentTag = this.masterTags[i];
+      if (currentTag.type === true) {
         this.tags = [];
         this.tags.push({
           'ecosystem' : DependencySnapshot.ECOSYSTEM,
-          'version' : this.masterTags[i].version,
-          'name' : this.masterTags[i].name
+          'version' : currentTag.version,
+          'name' : currentTag.name,
+          'category': currentTag.category
         });
         this.saveTagname.push({
           'name': this.masterTags[i].name
@@ -292,11 +305,11 @@ export class AddDependencyComponent implements OnInit, OnDestroy, OnChanges {
         });
       });
     });
-    this.categoryResult.forEach((i: any) => {
-      i.packages.forEach((x: any) => {
-          this.saveTagname.push({'name' : x, 'type' : false});
-      });
-  });
+  //   this.categoryResult.forEach((i: any) => {
+  //     i.packages.forEach((x: any) => {
+  //         this.saveTagname.push({'name' : x, 'type' : false});
+  //     });
+  // });
   for (let i = 0; i < this.masterTags.length; i++) {
     this.masterTags[i].present = false;
   }
@@ -305,9 +318,10 @@ export class AddDependencyComponent implements OnInit, OnDestroy, OnChanges {
       this.masterTags[i].grouped = false;
     }
   } else {
-    DependencySnapshot.DEP_FULL_ADDED.forEach((depAdded) => {
+    debugger;
+    DependencySnapshot.DEP_FULL_ADDED.forEach((depAdded: any) => {
       for (let i = 0; i < this.masterTags.length; i++) {
-        if (this.masterTags[i].name === depAdded.name && this.masterTags[i].version === depAdded.version) {
+        if (this.masterTags[i].name === depAdded.name && this.masterTags[i].version === depAdded.version && this.masterTags[i].category === depAdded.category) {
           this.masterTags[i].grouped = true;
           this.masterTags[i].present = true;
         } else {
