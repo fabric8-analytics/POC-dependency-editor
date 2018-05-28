@@ -61,11 +61,11 @@
           <tbody>
             <tr>
               <td> </td>
-              <td>{{dependency.github.contributors}}</td>
-              <td>{{dependency.github.dependent_repos}}</td>
-              <td>{{dependency.github.forks_count}}</td>
-              <td>{{dependency.github.stargazers_count}}</td>
-              <td>{{dependency.github.used_by.length}}</td>
+              <td>{{validateValues(dependency.github.contributors)}}</td>
+              <td>{{validateValues(dependency.github.dependent_repos)}}</td>
+              <td>{{validateValues(dependency.github.forks_count)}}</td>
+              <td>{{validateValues(dependency.github.stargazers_count)}}</td>
+              <td>{{validateValues(dependency.github.used_by.length)}}</td>
             </tr>
           </tbody>
         </table>
