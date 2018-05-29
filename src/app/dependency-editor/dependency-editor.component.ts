@@ -226,16 +226,18 @@ export class DependencyEditorComponent implements OnInit, OnChanges {
         alive = false;
       }
       subs = observable.subscribe((response: any) => {
-        const result: any = response.result[0];
-        rec = result.recommendation;
-        DependencySnapshot.ECOSYSTEM = result.user_stack_info.ecosystem;
-        DependencySnapshot.DEP_SNAPSHOT = result.user_stack_info.dependencies;
-        DependencySnapshot.REQUEST_ID = response.request_id;
-        this.setDependencies(result);
-        this.setCompanions(result);
-        this.setAlternate(result);
-        this.setLicenseData(result);
-        this.getCveData(this.service.getPayload());
+        const result: any = response.result && response.result[0] || null;
+        if (result !== null) {
+          rec = result.recommendation;
+          DependencySnapshot.ECOSYSTEM = result.user_stack_info.ecosystem;
+          DependencySnapshot.DEP_SNAPSHOT = result.user_stack_info.dependencies;
+          DependencySnapshot.REQUEST_ID = response.request_id;
+          this.setDependencies(result);
+          this.setCompanions(result);
+          this.setAlternate(result);
+          this.setLicenseData(result);
+          this.getCveData(this.service.getPayload());
+        }
       }, (error: any) => {
         // Handle server errors here
         this.errorStack = this.errorMessageHandler.getErrorMessage(error.status);
@@ -282,11 +284,13 @@ export class DependencyEditorComponent implements OnInit, OnChanges {
       alive = false;
     }
     subs = observable.subscribe((response: StackReportModel) => {
-        rec = response;
-        this.setCompanions(response.result[0]);
-        this.setAlternate(response.result[0]);
-        this.checkIfAlternatePresent(response.result[0].recommendation.alternate);
-        this.checkIfSecurityPresent(response.result[0].user_stack_info.analyzed_dependencies);
+        rec = response && response.result && response.result[0] || null;
+        if (rec) {
+          this.setCompanions(response.result[0]);
+          this.setAlternate(response.result[0]);
+          this.checkIfAlternatePresent(response.result[0].recommendation.alternate);
+          this.checkIfSecurityPresent(response.result[0].user_stack_info.analyzed_dependencies);
+        }
       }, (error: any) => {
         // Handle server errors here
         this.errorInsight = this.errorMessageHandler.getErrorMessage(error.status);
