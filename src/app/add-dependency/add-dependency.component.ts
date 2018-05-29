@@ -229,7 +229,6 @@ export class AddDependencyComponent implements OnInit, OnDestroy, OnChanges {
     this.dependencySearchString = '';
     this.noOfTags = 0;
     this.saveTagname = [];
-    debugger;
     let currentTag: any = null;
     for (let i = 0; i < this.masterTags.length; i++) {
       currentTag = this.masterTags[i];
@@ -318,7 +317,6 @@ export class AddDependencyComponent implements OnInit, OnDestroy, OnChanges {
       this.masterTags[i].grouped = false;
     }
   } else {
-    debugger;
     DependencySnapshot.DEP_FULL_ADDED.forEach((depAdded: any) => {
       for (let i = 0; i < this.masterTags.length; i++) {
         if (this.masterTags[i].name === depAdded.name && this.masterTags[i].version === depAdded.version && this.masterTags[i].category === depAdded.category) {

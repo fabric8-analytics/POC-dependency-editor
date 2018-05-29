@@ -34,6 +34,7 @@
         <div class="card-pf-body">
           <div class="pre-loader" *ngIf="!companions||!alternate">
             <div class="pre-loader-spinner spinner spinner-lg"></div>
+            <span class="loader-text">Retrieving insights based on the dependencies ...</span>
           </div>
           <p class="card-pf-aggregate-status-notifications" *ngIf="companions?.length === 0 && alternate?.length === 0">
             <span class="card-pf-aggregate-status-notification">
