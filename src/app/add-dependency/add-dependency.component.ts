@@ -271,6 +271,7 @@ export class AddDependencyComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   public showPackageModal(event: Event) {
+    this.toast = false;
     this.modalPackagePreview.open();
     this.getCategories();
   }
@@ -304,11 +305,11 @@ export class AddDependencyComponent implements OnInit, OnDestroy, OnChanges {
         });
       });
     });
-  //   this.categoryResult.forEach((i: any) => {
-  //     i.packages.forEach((x: any) => {
-  //         this.saveTagname.push({'name' : x, 'type' : false});
-  //     });
-  // });
+    this.categoryResult.forEach((i: any) => {
+        i.packages.forEach((x: any) => {
+            this.saveTagname.push({'name' : x, 'type' : false});
+        });
+    });
   for (let i = 0; i < this.masterTags.length; i++) {
     this.masterTags[i].present = false;
   }
