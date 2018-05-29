@@ -23,6 +23,7 @@
 
             <div class="pre-loader" *ngIf="isLoading">
               <div class="pre-loader-spinner spinner"></div>
+              <span class="loader-text">Fetching dependencies ...</span>
             </div>
             <ul class="dropdown-menu" *ngIf="dependencySearchResult?.length">
               <li *ngFor="let dep of dependencySearchResult">

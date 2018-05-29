@@ -94,7 +94,6 @@ export class DependencyEditorComponent implements OnInit, OnChanges {
     ngOnInit() {
     this.service.dependencySelected
       .subscribe((depSelected: DependencySearchItem) => {
-        debugger;
         this.isDepSelectedFromSearch = true;
         this.depToAdd = depSelected;
         const obj: any = {

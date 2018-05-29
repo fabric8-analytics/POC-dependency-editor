@@ -134,7 +134,6 @@ export class DependencyEditorService {
     }
 
     updateDependencyAddedSnapshot(depObj: EventDataModel) {
-        debugger;
         let depToAdd: any = {};
         if (depObj.depFull) {
             depToAdd = {
