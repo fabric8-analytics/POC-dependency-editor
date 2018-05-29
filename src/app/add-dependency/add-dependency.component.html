@@ -68,7 +68,14 @@
 
 <modal #PackagePreview id="PackagePreview" modalClass="modal-lg modal-fullscreen modal-width-class" title="Choose Dependency"
   role="dialog">
-  <modal-content class="contents">
+  <modal-content class="contents" *ngIf="!categoryResult || categoryResult.length === 0 || !masterTags">
+      <div class="modal-body">
+        <div class="pre-loader">
+          <div class="pre-loader-spinner spinner spinner-lg"></div>
+        </div>
+      </div>
+  </modal-content>
+  <modal-content class="contents" *ngIf="categoryResult && categoryResult.length > 0 && masterTags">
     <div class="modal-body">
       <div class="search-dependencies">
         <input  id="search-dep" class="search-box" type="text" [(ngModel)]="queryString" placeholder="Search for Dependencies..">
