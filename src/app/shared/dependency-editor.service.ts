@@ -52,6 +52,8 @@ export class DependencyEditorService {
     ) {
         this.LICENSE_API_BASE = this.checkForTrailingSlashes(this.urlProvider.getLicenseAPIUrl());
         this.RECOMMENDER_API_BASE = this.checkForTrailingSlashes(this.urlProvider.getRecommenderAPIUrl());
+        console.log('Check from environments', this.LICENSE_API_BASE, this.RECOMMENDER_API_BASE);
+
         this.URLS_HASH = {
             'CVE': this.RECOMMENDER_API_BASE + 'api/v1/depeditor-cve-analyses/',
             'LICENSE': this.LICENSE_API_BASE + 'api/v1/license-recommender',

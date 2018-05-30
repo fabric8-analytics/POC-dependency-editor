@@ -2,6 +2,7 @@ import {
   Component,
   OnInit,
   OnChanges,
+  OnDestroy,
   SimpleChanges,
   Input,
   Output,
@@ -42,13 +43,15 @@ import {
 import { TimerObservable } from 'rxjs/observable/TimerObservable';
 import 'rxjs/add/operator/takeWhile';
 
+import { DepEditorUtils } from '../shared/utils';
+
 
 @Component({
   selector: 'app-dependency-editor',
   styleUrls: ['./dependency-editor.component.less'],
   templateUrl: './dependency-editor.component.html'
 })
-export class DependencyEditorComponent implements OnInit, OnChanges {
+export class DependencyEditorComponent implements OnInit, OnChanges, OnDestroy {
   @Input() githubUrl = '';
   @Input() boosterInfo: BoosterInfo = null;
   @Input() githubRef = '';
@@ -92,31 +95,38 @@ export class DependencyEditorComponent implements OnInit, OnChanges {
   ) {}
 
     ngOnInit() {
-    this.service.dependencySelected
-      .subscribe((depSelected: DependencySearchItem) => {
-        this.isDepSelectedFromSearch = true;
-        this.depToAdd = depSelected;
-        const obj: any = {
-          depFull: null,
-          depSnapshot: {
-            package: depSelected.name,
-            version: depSelected.version
-          },
-          action: 'add'
-        };
-        this.callDepServices(obj);
-      });
-    this.service.dependencyRemoved
-      .subscribe((data: EventDataModel) => {
-        this.callDepServices(data);
-      });
+      if (!DepEditorUtils.isLoaded) {
+        DepEditorUtils.isLoaded = true;
+        return;
+      }
+      this.service.dependencySelected
+        .subscribe((depSelected: DependencySearchItem) => {
+          this.isDepSelectedFromSearch = true;
+          this.depToAdd = depSelected;
+          const obj: any = {
+            depFull: null,
+            depSnapshot: {
+              package: depSelected.name,
+              version: depSelected.version
+            },
+            action: 'add'
+          };
+          this.callDepServices(obj);
+        });
+      this.service.dependencyRemoved
+        .subscribe((data: EventDataModel) => {
+          this.callDepServices(data);
+        });
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log('in dependency editor github reference', this.githubRef);
     if (changes['githubUrl'] && changes['githubUrl']['currentValue'] && changes['githubRef'] && changes['githubRef']['currentValue']) {
       this.postStackAnalyses(this.githubUrl, this.githubRef);
     }
+  }
+
+  ngOnDestroy() {
+    DepEditorUtils.isLoaded = false;
   }
 
   public doContinue() {
