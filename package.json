@@ -74,22 +74,19 @@
     "npm": ">= 5.3.0"
   },
   "dependencies": {
-    "c3": "0.4.18",
-    "ngx-bootstrap": "1.9.3",
-    "ngx-modal": "0.0.29"
+    "c3": "^0.4.18",
+    "ngx-bootstrap": "^1.9.3",
+    "ngx-modal": "^0.0.29"
   },
   "peerDependencies": {
-    "@angular/core": "4.4.6",
-    "@angular/common": "4.4.6",
-    "@angular/forms": "4.4.6",
-    "@angular/http": "4.4.6",
-    "@angular/compiler": "4.4.6",
-    "@angular/compiler-cli": "4.4.6",
-    "@angular/platform-browser": "4.4.6",
-    "@angular/platform-browser-dynamic": "4.4.6",
-    "@angular/router": "4.4.6",
-    "rxjs": "5.5.2",
-    "zone.js": "0.8.5"
+    "@angular/core": "^4.4.6",
+    "@angular/common": "^4.4.6",
+    "@angular/forms": "^4.4.6",
+    "@angular/http": "^4.4.6",
+    "@angular/platform-browser": "^4.4.6",
+    "@angular/platform-browser-dynamic": "^4.4.6",
+    "@angular/router": "^4.4.6",
+    "rxjs": "^5.5.2"
   },
   "devDependencies": {
     "@angular/animations": "4.4.6",
