@@ -108,6 +108,7 @@ export class AddDependencyComponent implements OnInit, OnDestroy, OnChanges {
                                                   }, (error: any) => {
                                                     // Handle server errors here
                                                     this.errorComponentSearch = this.errorMessageHandler.getErrorMessage(error.status);
+                                                    this.isLoading = false;
                                                     console.log('error component search - ', this.errorComponentSearch);
                                                 });
   }
@@ -137,6 +138,7 @@ export class AddDependencyComponent implements OnInit, OnDestroy, OnChanges {
         this.addedTags();
       }, (error: any) => {
         // Handle server errors here
+        this.isLoading = false;
         this.errorCategories =  this.errorMessageHandler.getErrorMessage(error.status);
         console.log('error categories - ', this.errorCategories);
     });
