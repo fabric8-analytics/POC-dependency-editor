@@ -126,7 +126,7 @@ Step 1: Run `npm run watch:library` in the source directory::
 This will build fabric8-analytics-dep-editor as a library and then set up a watch task to
 rebuild any ts, html and scss files you change.
 
-Step 2: Run `npm link <path to fabric8-stack-analysis-ui>/dist-watch`::
+Step 2: Run `npm link <path to fabric8-stack-analysis-ui>/dist-watch --production`::
 In the webapp into which you are embedding. This will create a symlink from
 `node_modules/fabric8-analytics-dep-editor` to the `dist-watch` directory and install that
 symlinked node module into your webapp.
