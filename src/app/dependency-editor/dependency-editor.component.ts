@@ -97,26 +97,25 @@ export class DependencyEditorComponent implements OnInit, OnChanges, OnDestroy {
     ngOnInit() {
       if (!DepEditorUtils.isLoaded) {
         DepEditorUtils.isLoaded = true;
-        return;
-      }
-      this.service.dependencySelected
-        .subscribe((depSelected: DependencySearchItem) => {
-          this.isDepSelectedFromSearch = true;
-          this.depToAdd = depSelected;
-          const obj: any = {
-            depFull: null,
-            depSnapshot: {
-              package: depSelected.name,
-              version: depSelected.version
-            },
-            action: 'add'
-          };
-          this.callDepServices(obj);
-        });
+        this.service.dependencySelected
+            .subscribe((depSelected: DependencySearchItem) => {
+              this.isDepSelectedFromSearch = true;
+              this.depToAdd = depSelected;
+              const obj: any = {
+                depFull: null,
+                depSnapshot: {
+                  package: depSelected.name,
+                  version: depSelected.version
+                },
+                action: 'add'
+              };
+              this.callDepServices(obj);
+            });
       this.service.dependencyRemoved
         .subscribe((data: EventDataModel) => {
           this.callDepServices(data);
         });
+      }
   }
 
   ngOnChanges(changes: SimpleChanges): void {
