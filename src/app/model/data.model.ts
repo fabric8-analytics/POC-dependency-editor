@@ -273,3 +273,27 @@ export class BoosterInfo {
     mission: MissionInfo;
     runtime: MissionInfo;
 }
+
+export class AlertBox {
+    header: {
+        icon?: string;
+        name: string;
+        countInfo: string;
+        secondaryInfo?: {
+            mainText?: string;
+            subText?: string;
+        };
+        indicator?: string;
+    };
+    body: {
+        graphic?: {
+            config: any;
+        };
+        normal?: [{
+            isAccordion?: boolean;
+            primaryText?: string;
+            secondaryText?: string;
+        }],
+        defaultText?: string;
+    };
+}

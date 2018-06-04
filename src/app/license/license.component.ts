@@ -17,7 +17,8 @@ import {
 import {
   StackLicenseAnalysisModel,
   LicenseStackAnalysisModel,
-  BoosterInfo
+  BoosterInfo,
+  AlertBox
 } from '../model/data.model';
 import {
   AlertBoxComponent
@@ -49,6 +50,9 @@ export class LicenseComponent implements OnInit, OnChanges {
   public licenseCount: any = {};
   public liData: Array<any> = [];
   public charts: any = {};
+
+  public alertConfig: AlertBox = null;
+  public config: any = {};
 
 
   constructor() {}
@@ -154,5 +158,25 @@ export class LicenseComponent implements OnInit, OnChanges {
       }
     };
    }
+
+   // Forms configuration to make use of alert-box component
+
+  this.config = {
+    header: {
+      icon: this.icon,
+      name: this.title,
+      secondaryInfo: {
+        mainText: this.stackLicense,
+        subText: '(Stack Level)'
+      }
+    },
+    body: {
+      graphic: this.charts
+    }
+  };
+
+  this.alertConfig = <AlertBox> this.config;
+
   }
+
 }

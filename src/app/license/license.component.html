@@ -1,10 +1,7 @@
 <div class="row">
   <div class="col-sm-12 licenceCol">
     <div class="license">
-      <app-alert-box [title]="title" [issueStatus]="stackLicense" [issueType]="'(Stack Level)'" [licolor]="'#0088ce'" [colored]="'#fff'"
-        [issueSymbol]="icon" [hasIssue]="hasIssue" [licenseAll]="licenseAll" [licenseIssue]="licenseIssue" [liData]="liData"
-        [charts]="charts" [boosterInfo]="boosterInfo">
-      </app-alert-box>
+      <app-alert-box *ngIf="alertConfig" [alert]="alertConfig"></app-alert-box>
     </div>
   </div>
 </div>

@@ -1,82 +1,98 @@
+@headHeight: 40px;
+.mixin-headHeight {
+    font-size: 16px;
+    min-height: @headHeight;
+    max-height: @headHeight;
+    line-height: @headHeight;
+}
+.margin5LeftRight {
+    margin: 0 5px;
+}
 .alert-box {
-    // background: #fff;
-    text-align: left;
-    position: relative;
-    .alert-heading {
-        border-bottom: 1px solid #d1d1d1;
-        .alert-title {
-            // font-family: OpenSans-Semibold;
-            font-size: 16px;
-            color:#000;
-            #symbol {
-                padding-right: 4px;
+    .alert-head {
+        .mixin-headHeight;
+        &:after {
+            content: '';
+            display: block;
+            height: 1px;
+            background: #d1d1d1;
+            width: 100%;
+            top: 5px;
+            position: relative;
+        }
+        .icon-holder {
+            width: 20px;
+        }
+        & > span,
+        & > div {
+            float: left;
+        }
+        &:after {
+            content: '';
+            clear: both;
+            float: left;
+            display: block;
+        }
+        .title {
+            .margin5LeftRight;
+        }
+        .count-info {
+            .margin5LeftRight;
+        }
+        .secondary-info {
+            .main-text {
+                .margin5LeftRight;
+                color: #0088ce;
             }
-            #font-opensans {
-                font-weight: 600;;
-            }
-            .issueSymbol:before {
-                padding-right: 4px;
-            }
-            .if-security {
-                display: inline-block;
-                background:#9c9c9c;
-                border-radius:1px;
-                width:36px;
-                text-align:center;
-                #security-status {
-                    font-family:OpenSans-Bold;
-                    font-size:12px;
-                    text-align:center;
-                    color:#fff;
-                }
-            }
-            .if-license {
-                font-weight: bold;
-                padding-right:4px;
-            }
-            .licenseType {
+            .sub-text {
+                .margin5LeftRight;
                 font-size: 12px;
             }
         }
-    }
-    .list-view-pf-stacked {
-        display: block;
-        .fa-angle-right {
-            border-right: 1px solid #d1d1d1;
-        }
-    }
-    .row {
-        margin-left:50px;
-        #chart {
-            overflow: visible;
-            margin: 0px auto;
-            max-height: 200px;
-            .svg {
-                overflow: visible;
+        .indicator {
+            float: right;
+            width: 40px;
+            text-align: center;
+            &.error {
+                background: #d30025;
+                color: #fff;
+                & > .icon {
+                    color: inherit;
+                    &:before {
+                        color: inherit;
+                    }
+                }
             }
         }
     }
-    .no-loader {
-        width: auto;
-    }
-    .alert-sign {
-        padding: 12px 13px;
-        color: #fff;
-        height: 40px;
-        width: 40px;
-        // position: absolute;
-        // top: 0px;
-        // left: 305px;
-        position: relative;
-        top: -40px;
-        left: 290px;
-        .pficon-warning-triangle-o:before {
-            color: #fff;
+    .alert-body {
+        .default-body-text {
+            font-size: 14px;
+            margin-top: 20px;
+            text-align: left;
+            color: #8b8d8f;
         }
-        .pficon-warning-triangle-o {
-            font-family: PatternFlyIcons-webfont;
-            font-size: 15px;
-            color: #fff;
+        .graphic {
+            .chart {
+                text-align: center;
+                .ng2-c3 {
+                    display: inline-block;
+                }
+            }
+        }
+        .normal-text {
+            padding: 20px;
+            border-bottom: 1px solid #ededed;
+            margin-top: 5px;
+            font-size: 12px;
+            .primary-text {
+                display: inline-block;
+                margin-right: 20px;
+                font-weight: bold;
+            }
+            .secondary-text {
+                color: #363636;
+            }
         }
     }
 }
