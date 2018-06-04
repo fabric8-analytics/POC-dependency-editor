@@ -14,7 +14,7 @@ import {
   AccordionModule
 } from 'ngx-bootstrap';
 import {
-  CveResponseModel, BoosterInfo
+  AlertBox, BoosterInfo, CveResponseModel
 } from '../model/data.model';
 
 @Component({
@@ -36,9 +36,20 @@ export class SecurityComponent implements OnInit, OnChanges {
   public itSecurity = true;
   public cveName: any = [];
 
+  public alertConfig: AlertBox = null;
+  private config: any = {};
+
   constructor() {}
 
   ngOnChanges() {
+    this.formAlert();
+  }
+
+  ngOnInit() {
+    this.formAlert();
+  }
+
+  public formAlert() {
     this.hasIssue = false;
     this.secureIssue = false;
     this.cveName = [];
@@ -54,10 +65,11 @@ export class SecurityComponent implements OnInit, OnChanges {
           this.secureIssue = true;
 
           if (item.cve !== null) {
-            this.cveName.push([
-              item.cve.details,
-              item.package
-            ]);
+            this.cveName.push({
+              isAccordion: false,
+              primaryText: item.cve.details && item.cve.details.length > 0 ? item.cve.details[0].cve_id : '',
+              secondaryText: item.package
+            });
           }
         }
       });
@@ -67,9 +79,27 @@ export class SecurityComponent implements OnInit, OnChanges {
     } else {
       this.noOfCves = null;
     }
-  }
 
-  ngOnInit() {
+
+
+    // Forms configuration to make use of alert-box component
+
+  this.config = {
+      header: {
+        icon: this.icon,
+        name: this.title,
+        countInfo: this.noOfCves,
+        indicator: this.itSecurity === false ? 'ERROR' : ''
+      },
+      body: {
+        normal: this.cveName,
+        defaultText: 'The analytics engine has not identified any security issues affecting your stack.'
+      }
+  };
+
+
+
+  this.alertConfig = <AlertBox> this.config;
 
   }
 
