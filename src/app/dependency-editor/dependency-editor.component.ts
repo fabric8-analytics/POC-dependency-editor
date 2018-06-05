@@ -95,9 +95,7 @@ export class DependencyEditorComponent implements OnInit, OnChanges, OnDestroy {
   ) {}
 
     ngOnInit() {
-      if (!DepEditorUtils.isLoaded) {
-        DepEditorUtils.isLoaded = true;
-        this.service.dependencySelected
+      this.service.dependencySelected
             .subscribe((depSelected: DependencySearchItem) => {
               this.isDepSelectedFromSearch = true;
               this.depToAdd = depSelected;
@@ -115,7 +113,6 @@ export class DependencyEditorComponent implements OnInit, OnChanges, OnDestroy {
         .subscribe((data: EventDataModel) => {
           this.callDepServices(data);
         });
-      }
   }
 
   ngOnChanges(changes: SimpleChanges): void {

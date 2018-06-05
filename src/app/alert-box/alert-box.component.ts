@@ -18,4 +18,5 @@ import {
 
 export class AlertBoxComponent {
   @Input() alert: AlertBox;
+  @Input() isLoading: boolean;
 }

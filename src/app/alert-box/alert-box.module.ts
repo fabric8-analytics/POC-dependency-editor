@@ -5,10 +5,12 @@ import { FormsModule } from '@angular/forms';
 
 import { AlertBoxComponent } from './alert-box.component';
 import { ChartModule } from '../utils/chart/chart.module' ;
+import { AlertLoaderModule } from '../alert-loader/alert-loader.module';
 
 
 @NgModule({
  imports: [
+    AlertLoaderModule,
     CommonModule,
     HttpModule,
     FormsModule,
