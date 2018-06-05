@@ -26,7 +26,7 @@
             width:36px;
             text-align:center;
             .dep-count {
-                font-size:12px;
+                font-size:14px;
                 color:#fff;
             }
         }
@@ -35,6 +35,12 @@
         margin-bottom: 20px;
         .dependency-strech {
             min-height: 40px;
+            &:after {
+                content: '';
+                float: none;
+                clear: both;
+                display: block;
+            }
         }
     }
     .dep-card {
@@ -49,10 +55,11 @@
             position: relative;
             display: block;
             .search-text {
-                font-size:12px;
+                font-size:14px;
                 text-align:left;
                 margin-bottom: 10px;
                 display: inline-block;
+                font-weight: 400;
             }
             .row {
                 padding-top:3px;
@@ -87,13 +94,13 @@
                         display: inline-block;
                         margin-top: 25px;
                         color: #555;
-                        font-size: 12px;
+                        font-size: 14px;
                     }
                 }
                 .browse {
                     display: flex;
                     align-items: center;
-                    font-size:12px;
+                    font-size:14px;
                     color:#0088ce;
                     cursor:pointer;
                     &.ubrowse {
@@ -125,7 +132,8 @@
     }
 
     .chip {
-        margin-right: 14px;
+        margin: 5px 14px 5px 0;
+        float: left;
         .close-icon {
             background: #39a5dc;
             color: #fff;
@@ -248,7 +256,7 @@
                 }
             }
             .grouped {
-                font-size: 12px;
+                font-size: 14px;
                 color: #6ca100;
                 padding-left: 0px;
             }
@@ -345,7 +353,7 @@
                             .list-view-pf-additional-info {
                                 .list-view-pf-additional-info-item {
                                     font-family: OpenSans;
-                                    font-size: 12px;
+                                    font-size: 14px;
                                     color: #545b64;
                                     margin-right: 0;
                                     display: block;
@@ -364,7 +372,7 @@
                                     }
                                     #sec {
                                         font-family:OpenSans;
-                                        font-size:12px;
+                                        font-size:14px;
                                         color:#545b64;
                                     }
                                 }

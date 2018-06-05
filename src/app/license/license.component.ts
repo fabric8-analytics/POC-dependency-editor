@@ -57,7 +57,8 @@ export class LicenseComponent implements OnInit, OnChanges {
 
   constructor() {}
 
-  ngOnChanges() { this.stackStatus = '';
+  handleChanges() {
+    this.stackStatus = '';
     if (this.licenseData) {
       if (this.licenseData.status.toLowerCase() === 'successful') {
         this.hasIssue = false;
@@ -96,12 +97,18 @@ export class LicenseComponent implements OnInit, OnChanges {
           this.allLicenses.forEach((i) => {
             this.licenseAll.push(i);
           });
-        this.licenseChange();
       }
     }
+    this.licenseChange();
   }
 
-  ngOnInit() {}
+  ngOnChanges() {
+    this.handleChanges();
+  }
+
+  ngOnInit() {
+    this.handleChanges();
+  }
 
   public getShow(event: any) {
     this.toHave = event.toShow;

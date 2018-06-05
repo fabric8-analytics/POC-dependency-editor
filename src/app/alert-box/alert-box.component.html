@@ -18,6 +18,7 @@
   </div>
   <div class="alert-body" *ngIf="alert?.body">
     <!-- Body goes here -->
+    <alert-loader *ngIf="isLoading"></alert-loader>
     <div class="graphic" *ngIf="alert?.body?.graphic">
         <f8-chart class="chart" [data]="alert?.body?.graphic['data']" [chartOptions]="alert?.body?.graphic['options']" [configs]="alert?.body?.graphic['configs']"></f8-chart>
     </div>

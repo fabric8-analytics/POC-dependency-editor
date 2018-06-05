@@ -29,7 +29,7 @@ export class SecurityComponent implements OnInit, OnChanges {
 
   public title = 'Security Alert';
   public icon = 'fa fa-shield';
-  public noOfCves = 0;
+  public noOfCves: number = null;
   public hasIssue = false;
   public toHave = false;
   public secureIssue = false;
@@ -93,7 +93,7 @@ export class SecurityComponent implements OnInit, OnChanges {
       },
       body: {
         normal: this.cveName,
-        defaultText: 'The analytics engine has not identified any security issues affecting your stack.'
+        defaultText: this.noOfCves === 0 ? 'The analytics engine has not identified any security issues affecting your stack.' : ''
       }
   };
 
