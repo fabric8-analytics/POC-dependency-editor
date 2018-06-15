@@ -59,6 +59,7 @@ export class DependencyEditorComponent implements OnInit, OnChanges, OnDestroy {
   @Input() boosterInfo: BoosterInfo = null;
   @Input() githubRef = '';
   @Input() metadataInfo: any = null;
+  @Input() blankResponse: any= null;
 
   @Output() depSnapshot: EventEmitter<any> = new EventEmitter<any>();
   @Output() emitMetadata: EventEmitter<any> = new EventEmitter<any>();
@@ -123,6 +124,15 @@ export class DependencyEditorComponent implements OnInit, OnChanges, OnDestroy {
     if (changes['githubUrl'] && changes['githubUrl']['currentValue'] && changes['githubRef'] && changes['githubRef']['currentValue']) {
       this.postStackAnalyses(this.githubUrl, this.githubRef);
     }
+    if (changes['blankResponse'] && changes['blankResponse']['currentValue']) {
+      this.blankMissionFlow();
+    }
+  }
+
+  blankMissionFlow(): void {
+    this.getDependencyInsights(this.blankResponse);
+    // this.getCveData(this.blankResponse);
+    this.getLicenseData(this.blankResponse);
   }
 
   ngOnDestroy() {
@@ -313,7 +323,10 @@ export class DependencyEditorComponent implements OnInit, OnChanges, OnDestroy {
               this.setAlternate(recommendation);
               this.checkIfAlternatePresent(recommendation.alternate);
             }
-            this.checkIfSecurityPresent(response.result[0].user_stack_info.analyzed_dependencies);
+            let resultInformationModel: ResultInformationModel = response.result[0];
+            this.checkIfSecurityPresent(resultInformationModel.user_stack_info.analyzed_dependencies);
+            DependencySnapshot.REQUEST_ID = response.request_id;
+            this.handleInitialLoads(resultInformationModel);
           }
         }, (error: any) => {
           // Handle server errors here
@@ -324,6 +337,16 @@ export class DependencyEditorComponent implements OnInit, OnChanges, OnDestroy {
           alive = false;
         }
       });
+  }
+
+  private handleInitialLoads(resultInformationModel: ResultInformationModel): void {
+    DependencySnapshot.ECOSYSTEM = resultInformationModel.user_stack_info.ecosystem;
+    DependencySnapshot.DEP_SNAPSHOT = resultInformationModel.user_stack_info.dependencies;
+    this.setDependencies(resultInformationModel);
+    this.setCompanions(resultInformationModel.recommendation);
+    this.setAlternate(resultInformationModel.recommendation);
+    this.setLicenseData(resultInformationModel);
+    this.emitSecurityChangeNeeded();
   }
 
   private emitLicenseChangeNeeded(): void {
