@@ -102,6 +102,7 @@
                     font-size:14px;
                     color:#0088ce;
                     cursor:pointer;
+                    font-family: 'Open Sans SemiBold', sans-serif;
                     &.ubrowse {
                         color:#696868;
                     }
@@ -158,6 +159,11 @@
 
 #PackagePreview {
     margin-top: 45px;
+    .browse-modal {
+        .modal-title {
+            font-size: 16px;
+        }
+    }
     button.close {
         color: #000;
     }
@@ -168,11 +174,7 @@
         border: none;
         .search-dependencies {
             margin-bottom: 10px;
-            margin-right: 6px;
-            #search-dep {
-                width: 94%;
-                height: 30px;
-            }
+            margin-right: 12px;
             #dep-search-icon {
                 position: relative;
                 color: gray;
@@ -190,16 +192,22 @@
             }
         }
         .main {
-                .toast-pf {
-                    top: -80px;
-                    right: -200px;
-                    position: absolute;
-                    z-index: 9999;
-                    .alert-close {
-                        background: none;
-                        color: black;
-                    }
+            &:after {
+                content: '';
+                display: block;
+                float: none;
+                clear: both;
+            }
+            .toast-pf {
+                top: -80px;
+                right: -200px;
+                position: absolute;
+                z-index: 9999;
+                .alert-close {
+                    background: none;
+                    color: black;
                 }
+            }
             .categories {
                 position: relative;
                 width: 32%;
@@ -207,7 +215,7 @@
                 background: #fafafa;
                 margin-top: 10px;
                 margin-left: -30px;
-                display: inline-block;
+                float: left;
                 vertical-align: middle;
                 overflow-y: auto;
                 max-height: 650px;
@@ -255,9 +263,9 @@
                 }
             }
             .grouped {
-                font-size: 14px;
+                font-size: 12px;
                 color: #6ca100;
-                padding-left: 0px;
+                padding-left: 25px;
             }
             .dependencies {
                 position: relative;
@@ -265,7 +273,7 @@
                 background: #fff;
                 border: 1px solid #d1d1d1;
                 margin-top: 10px;
-                display: inline-block;
+                float: left;
                 vertical-align: top;
                 overflow-y: auto;
                 max-height: 650px;
