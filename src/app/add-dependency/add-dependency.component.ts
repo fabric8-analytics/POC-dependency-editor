@@ -45,7 +45,8 @@ import { Subscription } from 'rxjs/Subscription';
 @Component({
   selector: 'app-add-dependency',
   styleUrls: ['./add-dependency.component.less'],
-  templateUrl: './add-dependency.component.html'
+  templateUrl: './add-dependency.component.html',
+  encapsulation: ViewEncapsulation.None
 })
 
 export class AddDependencyComponent implements OnInit, OnDestroy, OnChanges {

@@ -64,7 +64,7 @@
   </div>
 </div>
 
-<modal #PackagePreview id="PackagePreview" modalClass="modal-lg modal-fullscreen modal-width-class" title="Choose Dependency"
+<modal #PackagePreview id="PackagePreview" modalClass="modal-lg modal-fullscreen browse-modal" title="Choose Dependency"
   role="dialog">
   <modal-content class="contents" *ngIf="!categoryResult || categoryResult.length === 0 || !masterTags">
       <div class="modal-body">
@@ -75,9 +75,11 @@
   </modal-content>
   <modal-content class="contents" *ngIf="categoryResult && categoryResult.length > 0 && masterTags">
     <div class="modal-body">
-      <div class="search-dependencies">
-        <input  id="search-dep" class="search-box" type="text" [(ngModel)]="queryString" placeholder="Search for Dependencies..">
-        <span id="dep-search-icon" class="fa fa-search search-icon" aria-hidden="true"></span>
+      <div class="input-group date search-dependencies">
+        <input class="form-control search-box" type="text" [(ngModel)]="queryString" placeholder="Search for Dependencies..">
+        <span class="input-group-addon" aria-hidden="true">
+          <span class="pficon-search"></span>
+        </span>
       </div>
       <div class="main">
         <div class="toast-pf alert alert-success alert-dismissable" *ngIf="toast">
@@ -125,7 +127,7 @@
         </div>
         <div class="dependencies">
           <div class="depn">
-            <div class="depn-select">Dependencies selected
+            <div class="depn-select">{{noOfTags}} Dependencies selected
               <span id="select">
                 <button class="added" (click)="addDependency()" [ngStyle]="{'border': noOfTags > 0 ? '1px solid #00659c' : '1px solid #d1d1d1' , 'background-image': noOfTags > 0 ? 'linear-gradient(-180deg, #39a5dc 0%, #0088ce 100%)' : 'none','color': noOfTags > 0 ? '#fff' : '#8b8d8f'}">
                   Add ({{noOfTags}})</button>
