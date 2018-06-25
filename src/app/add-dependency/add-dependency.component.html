@@ -95,7 +95,7 @@
         </div>
         <div class="categories">
           <div class="list-group list-view-pf list-view-pf-view tag-list">
-            <div class="list-group-item tag-list-item">
+            <div (click)="handleCategoryClick('All', 0)" [ngClass]="{'list-group-item tag-list-item': true, 'active-category': categoriesStore[0]?.isOpened}">
               <div class="list-view-pf-actions">
                 <label class="mix-label">{{tagZero}}</label>
               </div>
@@ -109,7 +109,7 @@
                 </div>
               </div>
             </div>
-            <div class="list-group-item tag-list-item-n" *ngFor="let tags of categoryResult">
+            <div (click)="handleCategoryClick(tags?.packages[0]?.category, i + 1)" [ngClass]="{'list-group-item tag-list-item-n': true, 'active-category': categoriesStore[i + 1]?.isOpened}" *ngFor="let tags of categoryResult; let i = index">
               <div class="list-view-pf-actions">
                 <label class="mix-label">{{tags.pkg_count}}</label>
               </div>
@@ -134,7 +134,7 @@
               </span>
             </div>
             <div class="display-dependencies">
-              <div class="list-group list-view-pf" *ngFor="let master of masterTags | FilterPipe: queryString ; let i = index;">
+              <div class="list-group list-view-pf" *ngFor="let master of masterTags | FilterPipe: queryString || categoryString; let i = index;">
                 <div class="list-group-item list-view-pf-stacked list-view-pf-top-align" [ngStyle]="{'background-color' : master.type ? '#def3ff' : (master.grouped ? '#ededed' : '#fff')}">
                   <div class="check">
                       <input type="checkbox" [disabled]="master.grouped" [checked]="master.type" (change)="changeTagname(master,master.type)">

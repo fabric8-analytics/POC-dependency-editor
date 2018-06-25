@@ -57,6 +57,7 @@ export class AddDependencyComponent implements OnInit, OnDestroy, OnChanges {
   @ViewChild('PackagePreview') modalPackagePreview: any;
 
   public queryString: any;
+  public categoryString: string;
   public dependencySearchString: string;
   public dependencySearchResult: Array < DependencySearchItem > = [];
   public isLoading = false;
@@ -81,6 +82,8 @@ export class AddDependencyComponent implements OnInit, OnDestroy, OnChanges {
   public type = false;
   public tags: Array < any > = [];
   public toast: boolean = false;
+
+  public categoriesStore: Array<any> = [];
 
   private addDependencySubscription: Subscription = null;
 
@@ -129,9 +132,16 @@ export class AddDependencyComponent implements OnInit, OnDestroy, OnChanges {
         this.categorySearchResult = response['categories'];
         this.isLoading = false;
         this.categoryResult = [];
+        this.categoriesStore = [];
+        this.categoriesStore.push({
+          isOpened: true
+        });
         for (const key in this.categorySearchResult) {
           if (this.categorySearchResult.hasOwnProperty(key)) {
             this.categoryResult.push(this.categorySearchResult[key]);
+            this.categoriesStore.push({
+              isOpened: false
+            });
           }
         }
         const p = this.getCategoryPayload(this.categoryResult);
@@ -143,6 +153,14 @@ export class AddDependencyComponent implements OnInit, OnDestroy, OnChanges {
         this.errorCategories =  this.errorMessageHandler.getErrorMessage(error.status);
         console.log('error categories - ', this.errorCategories);
     });
+  }
+
+  resetCategoryStore(fromIndex: number): void {
+    for (let i = fromIndex; i < this.categoriesStore.length; ++ i) {
+      if (this.categoriesStore[i].isOpened) {
+        this.categoriesStore[i].isOpened = false;
+      }
+    }
   }
 
   getCategoryPayload(categoryResult: any) {
@@ -289,12 +307,18 @@ export class AddDependencyComponent implements OnInit, OnDestroy, OnChanges {
   handleUserInputKeyPress(event: KeyboardEvent): void {
   }
 
+  public handleCategoryClick(tag: string, index: number) {
+    this.queryString = '';
+    this.categoryString = tag + '$$' + true;
+    this.resetCategoryStore(0);
+    this.categoriesStore[index].isOpened = true;
+  }
+
   public addedTags() {
     let count = 0;
     this.tagZero = 0;
     this.categoryResult.forEach((i: any) => {
-      count++;
-      this.tagZero = count;
+      count += i.packages.length || 0;
       i.packages.forEach((x: any) => {
         this.masterTags.push({
           'ecosystem' : DependencySnapshot.ECOSYSTEM,
@@ -308,6 +332,7 @@ export class AddDependencyComponent implements OnInit, OnDestroy, OnChanges {
         });
       });
     });
+    this.tagZero = count;
     this.categoryResult.forEach((i: any) => {
         i.packages.forEach((x: any) => {
             this.saveTagname.push({'name' : x, 'type' : false});
