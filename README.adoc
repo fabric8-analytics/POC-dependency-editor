@@ -14,7 +14,7 @@ to the codebase, unset it back or to "development" (default) mode and rebuild.
 
 [source,shell]
 ```
-$ export NODE_ENV=inmemory # <1>
+$ export NODE_ENV=inmemory # <1> 
 $ export NODE_ENV=development # <2>
 $ export NODE_ENV=production # <3>
 
