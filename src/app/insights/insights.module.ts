@@ -19,12 +19,14 @@ import {
 import {
     InsightComponent
 } from './insights.component';
+import { TooltipModule } from 'ngx-bootstrap/tooltip/tooltip.module';
 
 
 @NgModule({
     imports: [
         CommonModule,
         AccordionModule.forRoot(),
+        TooltipModule.forRoot(),
         HttpModule,
         FormsModule,
         ListElementModule

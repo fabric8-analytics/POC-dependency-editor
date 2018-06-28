@@ -87,6 +87,7 @@ export class SecurityComponent implements OnInit, OnChanges {
   this.config = {
       header: {
         icon: this.icon,
+        tooltip: 'Shows the security vulnerabilities in the stack',
         name: this.title,
         countInfo: this.noOfCves,
         indicator: this.itSecurity === false ? 'ERROR' : ''

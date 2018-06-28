@@ -13,6 +13,7 @@ import { DependencyEditorService } from '../shared/dependency-editor.service';
 import { URLProvider } from '../shared/url-provider';
 import { DependencyEditorTokenProvider } from '../shared/depeditor-tokenprovider';
 import { ErrorMessageHandler } from '../shared/error-message-handler';
+import { TooltipModule } from 'ngx-bootstrap/tooltip/tooltip.module';
 
 describe('AddDependencyComponent', () => {
   let component: AddDependencyComponent;
@@ -23,6 +24,7 @@ describe('AddDependencyComponent', () => {
       imports: [
         CommonModule,
         AccordionModule.forRoot(),
+        TooltipModule.forRoot(),
         HttpModule,
         FormsModule,
         ModalModule,

@@ -171,6 +171,7 @@ export class LicenseComponent implements OnInit, OnChanges {
   this.config = {
     header: {
       icon: this.icon,
+      tooltip: 'Shows the distinct licenses and the stack license',
       name: this.title,
       secondaryInfo: {
         mainText: this.stackLicense,

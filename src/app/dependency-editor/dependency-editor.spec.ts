@@ -2,7 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { DependencyEditorComponent } from './dependency-editor.component';
 import { CommonModule } from '@angular/common';
-import { AccordionModule } from 'ngx-bootstrap';
+import { AccordionModule, TooltipModule } from 'ngx-bootstrap';
 import { HttpModule } from '@angular/http';
 import { FormsModule } from '@angular/forms';
 import { ModalModule } from 'ngx-modal';
@@ -25,6 +25,7 @@ describe('DependencyEditorComponent', () => {
       imports: [
         CommonModule,
         AccordionModule.forRoot(),
+        TooltipModule.forRoot(),
         HttpModule,
         FormsModule,
         ModalModule,

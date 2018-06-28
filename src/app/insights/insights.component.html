@@ -6,8 +6,10 @@
         <span class="title">Insights</span>
         <span class="badge" *ngIf="companions || alternate">{{(companions?.length || 0) + (alternate?.length || 0) }}</span>
         <span class="add">
-          <button class="added" (click)="addCompanion()" [ngStyle]="{'border': noOfTags > 0 ? '1px solid #00659c' : '1px solid #d1d1d1' , 'background-image': noOfTags > 0 ? 'linear-gradient(-180deg, #39a5dc 0%, #0088ce 100%)' : 'none','color': noOfTags > 0 ? '#fff' : '#8b8d8f'}">
-            Add ({{noOfTags}})</button>
+          <button class="added"
+                  (click)="addCompanion()" [ngStyle]="{'border': noOfTags > 0 ? '1px solid #00659c' : '1px solid #d1d1d1' , 'background-image': noOfTags > 0 ? 'linear-gradient(-180deg, #39a5dc 0%, #0088ce 100%)' : 'none','color': noOfTags > 0 ? '#fff' : '#8b8d8f'}"
+                  tooltip="Adds the selected dependencies from insights section">
+                  Add ({{noOfTags}})</button>
         </span>
       </p>
       <span class="insightInfo">Use insights to identify potential issues with the selected dependencies and make changes.</span>

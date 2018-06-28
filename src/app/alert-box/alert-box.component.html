@@ -5,6 +5,10 @@
       <span [class]="alert?.header?.icon"></span>
     </span>
     <div class="title" *ngIf="alert?.header?.name" [innerHTML]="alert?.header?.name"></div>
+    <i *ngIf="alert?.header?.tooltip"
+          [tooltip]="alert?.header?.tooltip"
+          class="fa fa-info-circle"
+          aria-hidden="true"></i>
     <span class="count-info">
       <span *ngIf="alert?.header?.countInfo !== undefined" class="badge" [innerHTML]="alert?.header?.countInfo"></span>
     </span>
