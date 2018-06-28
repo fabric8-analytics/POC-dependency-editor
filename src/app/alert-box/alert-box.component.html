@@ -23,15 +23,17 @@
   <div class="alert-body" *ngIf="alert?.body">
     <!-- Body goes here -->
     <alert-loader *ngIf="isLoading"></alert-loader>
-    <div class="graphic" *ngIf="alert?.body?.graphic">
-        <f8-chart class="chart" [data]="alert?.body?.graphic['data']" [chartOptions]="alert?.body?.graphic['options']" [configs]="alert?.body?.graphic['configs']"></f8-chart>
-    </div>
-    <div *ngIf="alert?.body?.normal?.length > 0">
-      <div class="normal-text" *ngFor="let data of alert?.body?.normal">
-        <span class="primary-text" [innerHTML]="data?.primaryText"></span>
-        <span class="secondary-text" [innerHTML]="data?.secondaryText"></span>
+    <div *ngIf="!isLoading">
+      <div class="graphic" *ngIf="alert?.body?.graphic">
+          <f8-chart class="chart" [data]="alert?.body?.graphic['data']" [chartOptions]="alert?.body?.graphic['options']" [configs]="alert?.body?.graphic['configs']"></f8-chart>
       </div>
+      <div *ngIf="alert?.body?.normal?.length > 0">
+        <div class="normal-text" *ngFor="let data of alert?.body?.normal">
+          <span class="primary-text" [innerHTML]="data?.primaryText"></span>
+          <span class="secondary-text" [innerHTML]="data?.secondaryText"></span>
+        </div>
+      </div>
+      <div class="default-body-text" *ngIf="!alert?.body?.graphic && !alert?.body?.normal" [innerHTML]="alert?.body?.defaultText"></div>
     </div>
-    <div class="default-body-text" *ngIf="!alert?.body?.graphic && alert?.body?.normal?.length === 0" [innerHTML]="alert?.body?.defaultText"></div>
   </div>
 </div>

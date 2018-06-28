@@ -32,15 +32,20 @@
             (companionRemoved)="removeCompanion($event)" (tagAdded)="addTag($event)" (companionReleased)="releaseCompanion($event)"></app-list-element>
         </div>
         <div class="card-pf-body">
-          <div class="pre-loader" *ngIf="!companions||!alternate">
+          <div class="pre-loader" *ngIf="(!companions || !alternate) && !error">
             <div class="pre-loader-spinner spinner spinner-lg"></div>
             <span class="loader-text">Retrieving insights based on the dependencies ...</span>
           </div>
-          <p class="card-pf-aggregate-status-notifications" *ngIf="companions?.length === 0 && alternate?.length === 0">
+          <p class="card-pf-aggregate-status-notifications" *ngIf="companions?.length === 0 && alternate?.length === 0 && !error">
             <span class="card-pf-aggregate-status-notification">
               <span class="pficon pficon-info"></span>
               <h1 class="insight-info">No Insights Found</h1>
               <span>The Analytics engine has not identified any insights for your stack.</span>
+            </span>
+          </p>
+          <p class="card-pf-aggregate-status-notifications" *ngIf="error">
+            <span class="card-pf-aggregate-status-notification">
+              <span>{{error?.message}}</span>
             </span>
           </p>
         </div>

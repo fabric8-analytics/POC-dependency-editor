@@ -24,7 +24,7 @@ import {
 } from '../shared/dependency-editor.service';
 import {
   ErrorMessageHandler
-}from '../shared/error-message-handler';
+} from '../shared/error-message-handler';
 import {
   StackReportModel,
   DependencySnapshotItem,
@@ -35,7 +35,9 @@ import {
   DependencySearchItem,
   EventDataModel,
   LicenseStackAnalysisModel,
-  BoosterInfo
+  BoosterInfo,
+  ErrorUIModel,
+  LicenseUIModel
 } from '../model/data.model';
 import {
   DependencySnapshot
@@ -57,24 +59,25 @@ export class DependencyEditorComponent implements OnInit, OnChanges, OnDestroy {
   @Input() githubRef = '';
   @Input() metadataInfo: any = null;
 
-  @Output() depSnapshot: EventEmitter <any> = new EventEmitter <any>();
-  @Output() emitMetadata: EventEmitter <any> = new EventEmitter <any>();
-  @Output() navId: EventEmitter <string> = new EventEmitter <string>();
+  @Output() depSnapshot: EventEmitter<any> = new EventEmitter<any>();
+  @Output() emitMetadata: EventEmitter<any> = new EventEmitter<any>();
+  @Output() navId: EventEmitter<string> = new EventEmitter<string>();
   @ViewChild('dependencyPreview') modalDependencyPreview: any;
 
-  public dependencies: Array < DependencySnapshotItem > ;
-  public companions: Array < ComponentInformationModel > ;
-  public alternate: Array < ComponentInformationModel > ;
+  public dependencies: Array<DependencySnapshotItem>;
+  public companions: Array<ComponentInformationModel>;
+  public alternate: Array<ComponentInformationModel>;
   public licenseData: StackLicenseAnalysisModel;
   public lisData: LicenseStackAnalysisModel;
   public allLicenses: Array<any> = [];
   public cveData: CveResponseModel;
-  public dependenciesAdded: Array < ComponentInformationModel > = [];
-  public dependencyAdded: Array < DependencySnapshotItem > = [];
+  public dependenciesAdded: Array<ComponentInformationModel> = [];
+  public dependencyAdded: Array<DependencySnapshotItem> = [];
   public packageLength = 0;
   public addPackageLength = 0;
   public listView = 'View Dependency List';
   public metadata = {};
+  public error: any = null;
   public errorStack: any;
   public errorPostStack: any;
   public errorLicense: any;
@@ -92,27 +95,27 @@ export class DependencyEditorComponent implements OnInit, OnChanges, OnDestroy {
   constructor(
     private service: DependencyEditorService,
     private errorMessageHandler: ErrorMessageHandler
-  ) {}
+  ) { }
 
-    ngOnInit() {
-      this.service.dependencySelected
-            .subscribe((depSelected: DependencySearchItem) => {
-              this.isDepSelectedFromSearch = true;
-              this.depToAdd = depSelected;
-              const obj: any = {
-                depFull: null,
-                depSnapshot: {
-                  package: depSelected.name,
-                  version: depSelected.version
-                },
-                action: 'add'
-              };
-              this.callDepServices(obj);
-            });
-      this.service.dependencyRemoved
-        .subscribe((data: EventDataModel) => {
-          this.callDepServices(data);
-        });
+  ngOnInit() {
+    this.service.dependencySelected
+      .subscribe((depSelected: DependencySearchItem) => {
+        this.isDepSelectedFromSearch = true;
+        this.depToAdd = depSelected;
+        const obj: any = {
+          depFull: null,
+          depSnapshot: {
+            package: depSelected.name,
+            version: depSelected.version
+          },
+          action: 'add'
+        };
+        this.callDepServices(obj);
+      });
+    this.service.dependencyRemoved
+      .subscribe((data: EventDataModel) => {
+        this.callDepServices(data);
+      });
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -132,15 +135,15 @@ export class DependencyEditorComponent implements OnInit, OnChanges, OnDestroy {
     this.reset();
     this.service.updateDependencyAddedSnapshot(eventData);
     if (this.isDepSelectedFromSearch) {
-      DependencySnapshot.DEP_FULL_ADDED.push( < ComponentInformationModel > this.depToAdd);
+      DependencySnapshot.DEP_FULL_ADDED.push(<ComponentInformationModel>this.depToAdd);
       this.isDepSelectedFromSearch = false;
     }
     this.dependenciesAdded = DependencySnapshot.DEP_FULL_ADDED;
     this.depSnapshot.emit(DependencySnapshot.DEP_SNAPSHOT_ADDED);
     const payload = this.service.getPayload();
     this.getDependencyInsights(payload);
-    this.getCveData(payload);
-    this.getLicenseData(payload);
+    this.emitLicenseChangeNeeded();
+    this.emitSecurityChangeNeeded();
   }
 
   public checkIfAlternatePresent(alternates: ComponentInformationModel[]) {
@@ -164,8 +167,8 @@ export class DependencyEditorComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   public getMetadata(event: any): void {
-   this.metadata = event;
-   this.emitMetadata.emit(this.metadata);
+    this.metadata = event;
+    this.emitMetadata.emit(this.metadata);
   }
 
   public showDependencyModal(event: Event) {
@@ -205,71 +208,76 @@ export class DependencyEditorComponent implements OnInit, OnChanges, OnDestroy {
   private setLicenseData(result: ResultInformationModel) {
     this.licenseData = result.user_stack_info.license_analysis;
     this.allLicenses = result.user_stack_info.distinct_licenses;
+    debugger;
+    this.service.licenseSubscription.next(new LicenseUIModel(this.licenseData, null, this.allLicenses));
   }
 
   private setAlternate(result: ResultInformationModel) {
     if (result && result.recommendation && result.recommendation.alternate) {
-      this.alternate  = result.recommendation.alternate;
+      this.alternate = result.recommendation.alternate;
     }
   }
 
   private postStackAnalyses(githubUrl: string, githubRef: string) {
     this.service.postStackAnalyses(githubUrl, githubRef)
-    .subscribe((data: any) => {
-        // });
-      let subs: any = null;
-      let rec: any = null;
-      const interval: number = 5000;
-      let alive: boolean = true;
-      let counter: number = 0;
-      let observable: any = this.service
-      .getStackAnalyses(data['id']);
-      TimerObservable.create(0, interval)
-      .takeWhile(() => alive)
-      .subscribe(() => {
-      if (rec) {
-        subs.unsubscribe();
-        alive = false;
-      }
-      subs = observable.subscribe((response: any) => {
-        const result: any = response.result && response.result[0] || null;
-        if (result !== null) {
-          rec = result.recommendation;
-          DependencySnapshot.ECOSYSTEM = result.user_stack_info.ecosystem;
-          DependencySnapshot.DEP_SNAPSHOT = result.user_stack_info.dependencies;
-          DependencySnapshot.REQUEST_ID = response.request_id;
-          this.setDependencies(result);
-          this.setCompanions(result);
-          this.setAlternate(result);
-          this.setLicenseData(result);
-          this.getCveData(this.service.getPayload());
-        }
+      .subscribe((data: any) => {
+        let subs: any = null;
+        let rec: any = null;
+        const interval: number = 5000;
+        let alive: boolean = true;
+        let counter: number = 0;
+        let observable: any = this.service
+          .getStackAnalyses(data['id']);
+        TimerObservable.create(0, interval)
+          .takeWhile(() => alive)
+          .subscribe(() => {
+            if (rec) {
+              subs.unsubscribe();
+              alive = false;
+            }
+            subs = observable.subscribe((response: any) => {
+              const result: any = response.result && response.result[0] || null;
+              if (result !== null) {
+                rec = result.recommendation;
+                DependencySnapshot.ECOSYSTEM = result.user_stack_info.ecosystem;
+                DependencySnapshot.DEP_SNAPSHOT = result.user_stack_info.dependencies;
+                DependencySnapshot.REQUEST_ID = response.request_id;
+                this.setDependencies(result);
+                this.setCompanions(result);
+                this.setAlternate(result);
+                this.setLicenseData(result);
+                this.emitSecurityChangeNeeded();
+              }
+            }, (error: any) => {
+              // Handle server errors here
+              alive = false;
+              this.errorStack = error && error.message;
+              this.emitErrors(error);
+            });
+            if (counter++ > 4) {
+              alive = false;
+            }
+          });
       }, (error: any) => {
         // Handle server errors here
-        this.errorStack = this.errorMessageHandler.getErrorMessage(error.status);
-        console.log('error stack get - ', this.errorStack);
-    });
-      if (counter ++ > 4) {
-        alive = false;
-    }
-    });
-    }, (error: any) => {
-      // Handle server errors here
-        this.errorPostStack = this.errorMessageHandler.getErrorMessage(error.status);
-        console.log('error stack post - ', this.errorPostStack);
-  });
+        this.errorPostStack = error && error.message;
+        this.emitErrors(error);
+      });
+  }
+
+  private emitErrors(error: ErrorUIModel): void {
+    this.error = error;
+    this.service.licenseSubscription.next(error);
+    this.service.securitySubscription.next(error);
   }
 
   private getLicenseData(payload: any) {
     this.service.getDependencyData('LICENSE', payload)
       .subscribe((response: LicenseStackAnalysisModel) => {
-        this.lisData = response;
-        this.allLicenses = response.distinct_licenses;
+        this.service.licenseSubscription.next(new LicenseUIModel(null, response, response.distinct_licenses));
       }, (error: any) => {
-        // Handle server errors here
-        this.errorLicense = this.errorMessageHandler.getErrorMessage(error.status);
-        console.log('error stack license', this.errorLicense, error);
-    });
+        this.service.licenseSubscription.next(new ErrorUIModel(error.status, error.message));
+      });
   }
 
   private getDependencyInsights(payload: any) {
@@ -281,41 +289,37 @@ export class DependencyEditorComponent implements OnInit, OnChanges, OnDestroy {
     // const persist = false;
     // const urlToHit = this.getDepInsightsUrl + '?persist=' + persist;
     let observable: any = this.service
-    .getDependencyData('DEPEDITORANALYSIS', payload);
+      .getDependencyData('DEPEDITORANALYSIS', payload);
     TimerObservable.create(0, interval)
-    .takeWhile(() => alive)
-    .subscribe(() => {
-    if (rec) {
-      subs.unsubscribe();
-      alive = false;
-    }
-    subs = observable.subscribe((response: StackReportModel) => {
-        rec = response && response.result && response.result[0] || null;
+      .takeWhile(() => alive)
+      .subscribe(() => {
         if (rec) {
-          this.setCompanions(response.result[0]);
-          this.setAlternate(response.result[0]);
-          this.checkIfAlternatePresent(response.result[0].recommendation.alternate);
-          this.checkIfSecurityPresent(response.result[0].user_stack_info.analyzed_dependencies);
+          subs.unsubscribe();
+          alive = false;
         }
-      }, (error: any) => {
-        // Handle server errors here
-        this.errorInsight = this.errorMessageHandler.getErrorMessage(error.status);
-        console.log('error stack insight - ', this.errorInsight);
-    });
-      if (counter ++ > 4) {
-        alive = false;
-    }
-    });
+        subs = observable.subscribe((response: StackReportModel) => {
+          rec = response && response.result && response.result[0] || null;
+          if (rec) {
+            this.setCompanions(response.result[0]);
+            this.setAlternate(response.result[0]);
+            this.checkIfAlternatePresent(response.result[0].recommendation.alternate);
+            this.checkIfSecurityPresent(response.result[0].user_stack_info.analyzed_dependencies);
+          }
+        }, (error: any) => {
+          // Handle server errors here
+          this.errorInsight = error && error.message;
+        });
+        if (counter++ > 4) {
+          alive = false;
+        }
+      });
   }
 
-  private getCveData(payload: any) {
-    this.service.getDependencyData('CVE', payload)
-      .subscribe((response: CveResponseModel) => {
-        this.cveData = response;
-      }, (error: any) => {
-        // Handle server errors here
-        this.errorSecurity = this.errorMessageHandler.getErrorMessage(error.status);
-        console.log('error stack security - ', this.errorSecurity);
-    });
+  private emitLicenseChangeNeeded(): void {
+    this.service.needsLicenseChange.next(true);
+  }
+
+  private emitSecurityChangeNeeded(): void {
+    this.service.needsSecurityChange.next(true);
   }
 }

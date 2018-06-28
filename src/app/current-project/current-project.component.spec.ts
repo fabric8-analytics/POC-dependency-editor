@@ -7,6 +7,10 @@ import { HttpModule } from '@angular/http';
 import { FormsModule } from '@angular/forms';
 import { SecurityModule } from '../security/security.module';
 import { LicenseModule } from '../license/license.module';
+import { DependencyEditorService } from '../shared/dependency-editor.service';
+import { HttpInterceptor } from '../shared/http-interceptor';
+import { DependencyEditorTokenProvider } from '../shared/depeditor-tokenprovider';
+import { URLProvider } from '../shared/url-provider';
 
 describe('CurrentprojectComponent', () => {
   let component: CurrentprojectComponent;
@@ -26,6 +30,10 @@ describe('CurrentprojectComponent', () => {
          CurrentprojectComponent
      ],
      providers: [
+       HttpInterceptor,
+       DependencyEditorService,
+       DependencyEditorTokenProvider,
+       URLProvider
      ]
     }).compileComponents();
   }));

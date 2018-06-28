@@ -15,6 +15,7 @@ import { CurrentprojectModule } from '../current-project/current-project.module'
 import { DependencyEditorService } from '../shared/dependency-editor.service';
 import { URLProvider } from '../shared/url-provider';
 import { ErrorMessageHandler } from '../shared/error-message-handler';
+import { HttpInterceptor } from '../shared/http-interceptor';
 
 @NgModule({
  imports: [
@@ -40,7 +41,8 @@ import { ErrorMessageHandler } from '../shared/error-message-handler';
     URLProvider,
     DependencyEditorTokenProvider,
     DependencyEditorService,
-    ErrorMessageHandler
+    ErrorMessageHandler,
+    HttpInterceptor
  ]
 })
 export class DependencyEditorModule {}
