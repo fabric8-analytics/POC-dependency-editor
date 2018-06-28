@@ -8,12 +8,13 @@ import { FormsModule } from '@angular/forms';
 import { ModalModule } from 'ngx-modal';
 import { ListElementModule } from '../list-element/list-element.module';
 import { FilterPipe } from './add-dependency.pipe';
+import { MaxLengthPipe } from './maxlength.pipe';
 import { DependencyEditorService } from '../shared/dependency-editor.service';
 import { URLProvider } from '../shared/url-provider';
 import { DependencyEditorTokenProvider } from '../shared/depeditor-tokenprovider';
 import { ErrorMessageHandler } from '../shared/error-message-handler';
 
-describe('CurrentprojectComponent', () => {
+describe('AddDependencyComponent', () => {
   let component: AddDependencyComponent;
   let fixture: ComponentFixture<AddDependencyComponent>;
 
@@ -29,7 +30,8 @@ describe('CurrentprojectComponent', () => {
     ],
      declarations: [
         AddDependencyComponent,
-        FilterPipe
+        FilterPipe,
+        MaxLengthPipe
     ],
      providers: [
       URLProvider,

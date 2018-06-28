@@ -324,6 +324,7 @@ export class AddDependencyComponent implements OnInit, OnDestroy, OnChanges {
           'ecosystem' : DependencySnapshot.ECOSYSTEM,
           'version' : x.version,
           'name' : x.name,
+          'description': x.description,
           'category' : x.category,
           'type' : false,
           'grouped' : false,

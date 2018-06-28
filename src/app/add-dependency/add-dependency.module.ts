@@ -6,6 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { ModalModule } from 'ngx-modal';
 
 import { FilterPipe } from './add-dependency.pipe';
+import { MaxLengthPipe } from './maxlength.pipe';
 import { AddDependencyComponent } from './add-dependency.component';
 import { ListElementModule } from '../list-element/list-element.module';
 import { URLProvider } from '../shared/url-provider';
@@ -24,7 +25,9 @@ import { ErrorMessageHandler } from '../shared/error-message-handler';
     ListElementModule
 ],
  declarations: [
-    AddDependencyComponent, FilterPipe
+    AddDependencyComponent,
+    FilterPipe,
+    MaxLengthPipe
 ],
  exports: [
     AddDependencyComponent
