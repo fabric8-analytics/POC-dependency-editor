@@ -320,17 +320,19 @@ export class AddDependencyComponent implements OnInit, OnDestroy, OnChanges {
     this.categoryResult.forEach((i: any) => {
       count += i.packages.length || 0;
       i.packages.forEach((x: any) => {
-        this.masterTags.push({
-          'ecosystem' : DependencySnapshot.ECOSYSTEM,
-          'version' : x.version,
-          'name' : x.name,
-          'description': x.description,
-          'category' : x.category,
-          'type' : false,
-          'grouped' : false,
-          'security' : null,
-          'present' : false
-        });
+        if (!this.isACoreDependency(x)) {
+          this.masterTags.push({
+            'ecosystem' : DependencySnapshot.ECOSYSTEM,
+            'version' : x.version,
+            'name' : x.name,
+            'description': x.description,
+            'category' : x.category,
+            'type' : false,
+            'grouped' : false,
+            'security' : null,
+            'present' : false
+          });
+        }
       });
     });
     this.tagZero = count;
@@ -362,5 +364,9 @@ export class AddDependencyComponent implements OnInit, OnDestroy, OnChanges {
       }
     });
   }
+  }
+
+  private isACoreDependency(dependency: any): boolean {
+    return this.existDependencies && this.existDependencies.filter((a: DependencySnapshotItem) => a.package === dependency.name).length !== 0;
   }
 }
