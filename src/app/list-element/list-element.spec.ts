@@ -8,6 +8,7 @@ import { TooltipModule } from 'ngx-bootstrap';
 import { URLProvider } from '../shared/url-provider';
 import { DependencyEditorTokenProvider } from '../shared/depeditor-tokenprovider';
 import { DependencyEditorService } from '../shared/dependency-editor.service';
+import { HttpInterceptor } from '../shared/http-interceptor';
 
 describe('ListElementComponent', () => {
   let component: ListElementComponent;
@@ -26,6 +27,7 @@ describe('ListElementComponent', () => {
      ],
       providers: [
         URLProvider,
+        HttpInterceptor,
         DependencyEditorTokenProvider,
         DependencyEditorService
       ]

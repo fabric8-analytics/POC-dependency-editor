@@ -6,6 +6,10 @@ import { AccordionModule } from 'ngx-bootstrap';
 import { HttpModule } from '@angular/http';
 import { FormsModule } from '@angular/forms';
 import { AlertBoxModule } from '../alert-box/alert-box.module';
+import { DependencyEditorService } from '../shared/dependency-editor.service';
+import { HttpInterceptor } from '../shared/http-interceptor';
+import { DependencyEditorTokenProvider } from '../shared/depeditor-tokenprovider';
+import { URLProvider } from '../shared/url-provider';
 
 describe('SecurityComponent', () => {
   let component: SecurityComponent;
@@ -21,7 +25,13 @@ describe('SecurityComponent', () => {
          AlertBoxModule
      ],
       declarations: [
-         SecurityComponent
+        SecurityComponent
+     ],
+     providers: [
+      HttpInterceptor,
+      DependencyEditorService,
+      DependencyEditorTokenProvider,
+      URLProvider
      ]
     }).compileComponents();
   }));

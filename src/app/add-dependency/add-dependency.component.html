@@ -179,7 +179,7 @@
                         </div>
                       </div>
                       </div>
-                      <div class="list-group-item-text">
+                      <div class="list-group-item-text" *ngIf="master.description">
                         <p *ngIf="!master.showMore" class="description">{{master.description | maxLength: 10}}</p>
                         <p *ngIf="master.showMore" class="description">{{master.description}}</p>
                         <a href="javascript:void(0);" (click)="master.showMore = master.showMore === undefined ? true : !master.showMore">

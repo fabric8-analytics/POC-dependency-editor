@@ -14,6 +14,7 @@ import { URLProvider } from '../shared/url-provider';
 import { DependencyEditorTokenProvider } from '../shared/depeditor-tokenprovider';
 import { ErrorMessageHandler } from '../shared/error-message-handler';
 import { TooltipModule } from 'ngx-bootstrap/tooltip/tooltip.module';
+import { HttpInterceptor } from '../shared/http-interceptor';
 
 describe('AddDependencyComponent', () => {
   let component: AddDependencyComponent;
@@ -38,6 +39,7 @@ describe('AddDependencyComponent', () => {
      providers: [
       URLProvider,
       DependencyEditorTokenProvider,
+      HttpInterceptor,
       DependencyEditorService,
       ErrorMessageHandler
      ]

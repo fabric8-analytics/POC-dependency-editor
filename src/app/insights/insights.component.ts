@@ -16,7 +16,7 @@ import {
 import * as _ from 'lodash';
 
 import {
-  ComponentInformationModel, EventDataModel, BoosterInfo
+  ComponentInformationModel, EventDataModel, BoosterInfo, ErrorUIModel
 } from '../model/data.model';
 
 @Component({
@@ -27,48 +27,50 @@ import {
 
 export class InsightComponent implements OnInit, OnChanges {
   @Input() boosterInfo: BoosterInfo;
-  @Input() companions: Array < ComponentInformationModel > ;
-  @Input() alternate: Array < ComponentInformationModel > ;
-  @Output() companionAdded = new EventEmitter < any > ();
+  @Input() companions: Array<ComponentInformationModel>;
+  @Input() alternate: Array<ComponentInformationModel>;
+  @Input() error: ErrorUIModel;
+
+  @Output() companionAdded = new EventEmitter<any>();
 
   public hasIssue: boolean = false;
   public objToEmit: EventDataModel[] = [];
   public added: Array<any> = [];
   public noOfTags: number = 0;
 
-  constructor() {}
+  constructor() { }
 
-  ngOnChanges() {}
+  ngOnChanges() { }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   public addTag(eventData: Array<any>) {
-        for (let i = 0; i < this.companions.length + this.alternate.length; i++) {
-          if (this.added.length > 0 && this.added[i] && this.added[i].name === eventData[0].name) {
-             if (this.added[i].type === true && eventData[0].type === true) {
-                continue;
-              } else if (this.added[i].type === true && eventData[0].type === false) {
-                  this.added[i].type = false;
-                  this.noOfTags--;
-                  i++;
-                  break;
-                } else {
-                if (eventData[0].type === true) {
-                  this.added[i].type = true;
-                  this.noOfTags++;
-                  break;
-                } else if (eventData[0].type === false) {
-                  this.added[i].type = false;
-                  this.noOfTags--;
-                  break;
-                }
-              }
-          } else if (i === this.added.length) {
-            this.added.push(eventData[0]);
+    for (let i = 0; i < this.companions.length + this.alternate.length; i++) {
+      if (this.added.length > 0 && this.added[i] && this.added[i].name === eventData[0].name) {
+        if (this.added[i].type === true && eventData[0].type === true) {
+          continue;
+        } else if (this.added[i].type === true && eventData[0].type === false) {
+          this.added[i].type = false;
+          this.noOfTags--;
+          i++;
+          break;
+        } else {
+          if (eventData[0].type === true) {
+            this.added[i].type = true;
             this.noOfTags++;
+            break;
+          } else if (eventData[0].type === false) {
+            this.added[i].type = false;
+            this.noOfTags--;
             break;
           }
         }
+      } else if (i === this.added.length) {
+        this.added.push(eventData[0]);
+        this.noOfTags++;
+        break;
+      }
+    }
   }
 
   public companionWasAdded(eventData: any) {
@@ -97,7 +99,7 @@ export class InsightComponent implements OnInit, OnChanges {
 
   public addCompanion() {
     for (let i = 0; i < this.added.length; i++) {
-      if ( this.added[i].type === true) {
+      if (this.added[i].type === true) {
         this.companionAdded.emit(this.objToEmit[i]);
       }
     }
@@ -114,7 +116,7 @@ export class InsightComponent implements OnInit, OnChanges {
         action: 'remove'
       };
     }
-}
+  }
 
   public removeCompanion(dependency: ComponentInformationModel) {
     _.remove(this.companions, (companion) => {

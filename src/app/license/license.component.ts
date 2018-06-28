@@ -6,7 +6,8 @@ import {
   Output,
   EventEmitter,
   ViewEncapsulation,
-  ViewChild
+  ViewChild,
+  SimpleChanges
 } from '@angular/core';
 import {
   FormsModule
@@ -17,12 +18,14 @@ import {
 import {
   StackLicenseAnalysisModel,
   LicenseStackAnalysisModel,
-  BoosterInfo,
-  AlertBox
+  AlertBox,
+  LicenseUIModel,
+  ErrorUIModel
 } from '../model/data.model';
 import {
   AlertBoxComponent
 } from '../alert-box/alert-box.component';
+import { DependencyEditorService } from '../shared/dependency-editor.service';
 
 @Component({
   selector: 'app-license',
@@ -31,12 +34,9 @@ import {
 })
 
 export class LicenseComponent implements OnInit, OnChanges {
-  @Input() licenseData: StackLicenseAnalysisModel;
-  @Input() lisData: LicenseStackAnalysisModel;
-  @Input() allLicenses: Array < any > = [];
-  @Input() boosterInfo: BoosterInfo;
   @ViewChild(AlertBoxComponent) alertBoxComponent: AlertBoxComponent;
 
+  public isLoading: boolean = true;
   public title = 'License';
   public icon = 'pficon pficon-on-running';
   public stackLicense: string;
@@ -49,13 +49,48 @@ export class LicenseComponent implements OnInit, OnChanges {
   public licenseDt: Array < any > = [];
   public licenseCount: any = {};
   public liData: Array<any> = [];
-  public charts: any = {};
+  public charts: any = null;
 
   public alertConfig: AlertBox = null;
   public config: any = {};
 
+  private licenseData: StackLicenseAnalysisModel;
+  private lisData: LicenseStackAnalysisModel;
+  private allLicenses: Array < any > = [];
 
-  constructor() {}
+
+  constructor(private service: DependencyEditorService) {
+    this.isLoading = true;
+    this.subscribeToLicenseInformation();
+  }
+
+  subscribeToLicenseInformation(): void {
+    this.service.licenseSubscription.subscribe((response: LicenseUIModel | ErrorUIModel) => {
+      if (response instanceof LicenseUIModel) {
+        this.licenseData = response.licenseData;
+        this.lisData = response.lisData;
+        this.allLicenses = response.allLicenses;
+        this.handleChanges();
+      } else if (response instanceof ErrorUIModel) {
+        this.config = {
+          header: {
+            icon: this.icon,
+            name: this.title
+          },
+          body: {
+            defaultText: response.message
+          }
+        };
+        this.alertConfig = <AlertBox> this.config;
+      }
+      this.isLoading = false;
+    });
+    this.service.needsLicenseChange.subscribe((response: boolean) => {
+      if (response) {
+        this.getLicenseData();
+      }
+    });
+  }
 
   handleChanges() {
     this.stackStatus = '';
@@ -92,7 +127,7 @@ export class LicenseComponent implements OnInit, OnChanges {
       this.stackStatus = null;
     }
     this.licenseAll = [];
-    if (this.stackStatus === 'Successful') {
+    if (this.stackStatus === 'Successful' && this.allLicenses) {
       for (let x = 0 ; x < this.allLicenses.length ; x++) {
           this.allLicenses.forEach((i) => {
             this.licenseAll.push(i);
@@ -102,7 +137,8 @@ export class LicenseComponent implements OnInit, OnChanges {
     this.licenseChange();
   }
 
-  ngOnChanges() {
+  ngOnChanges(changes: SimpleChanges) {
+    debugger;
     this.handleChanges();
   }
 
@@ -141,6 +177,7 @@ export class LicenseComponent implements OnInit, OnChanges {
 
   public displayLicenses(liData: any): void {
     if (this.stackStatus === 'Successful') {
+      this.charts = {};
       this.charts['data'] = {
       columns: liData,
       type: 'donut'
@@ -178,13 +215,30 @@ export class LicenseComponent implements OnInit, OnChanges {
         subText: '(Stack Level)'
       }
     },
-    body: {
-      graphic: this.charts
-    }
+    body: {}
   };
 
-  this.alertConfig = <AlertBox> this.config;
+  if (this.charts) {
+    this.config['body']['graphic'] = this.charts;
+  } else {
+    this.config['body']['defaultText'] = 'Unable to render chart';
+  }
 
+  this.alertConfig = <AlertBox> this.config;
+  this.isLoading = false;
+  }
+
+  private getLicenseData() {
+    let payload: any = this.service.getPayload();
+    this.isLoading = true;
+    this.service.getDependencyData('LICENSE', payload)
+      .subscribe((response: LicenseStackAnalysisModel) => {
+        this.service.licenseSubscription.next(new LicenseUIModel(null, response, response.distinct_licenses));
+        this.isLoading = false;
+      }, (error: any) => {
+        this.service.licenseSubscription.next(new ErrorUIModel(error.status, error.message));
+        this.isLoading = false;
+    });
   }
 
 }

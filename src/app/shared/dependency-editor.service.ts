@@ -5,7 +5,6 @@ import {
     Output
 } from '@angular/core';
 import {
-    Http,
     Response,
     Headers,
     RequestOptions
@@ -14,6 +13,7 @@ import {
     DependencyEditorTokenProvider
 } from './depeditor-tokenprovider';
 import { URLProvider } from './url-provider';
+import { Subject } from 'rxjs/Subject';
 import {
     Observable
 } from 'rxjs/Observable';
@@ -29,16 +29,25 @@ import {
     CveResponseModel,
     DependencySearchItem,
     EventDataModel,
-    LicenseStackAnalysisModel
+    LicenseStackAnalysisModel,
+    ErrorUIModel,
+    LicenseUIModel
 } from '../model/data.model';
 import {
     DependencySnapshot
 } from '../utils/dependency-snapshot';
 
+import { HttpInterceptor } from '../shared/http-interceptor';
+
 @Injectable()
 export class DependencyEditorService {
     @Output() dependencySelected = new EventEmitter < DependencySearchItem > ();
     @Output() dependencyRemoved = new EventEmitter < EventDataModel > ();
+
+    licenseSubscription: Subject<LicenseUIModel | ErrorUIModel> = new Subject<LicenseUIModel | ErrorUIModel>();
+    needsLicenseChange: Subject<boolean> = new Subject<boolean>();
+    securitySubscription: Subject<CveResponseModel | ErrorUIModel> = new Subject<CveResponseModel | ErrorUIModel>();
+    needsSecurityChange: Subject<boolean> = new Subject<boolean>();
 
     private RECOMMENDER_API_BASE: string = '';
     private LICENSE_API_BASE: string = '';
@@ -46,7 +55,7 @@ export class DependencyEditorService {
     private URLS_HASH: any = {};
 
     constructor(
-        private http: Http,
+        private http: HttpInterceptor,
         private tokenProvider: DependencyEditorTokenProvider,
         private urlProvider: URLProvider
     ) {
@@ -55,7 +64,7 @@ export class DependencyEditorService {
         console.log('Check from environments', this.LICENSE_API_BASE, this.RECOMMENDER_API_BASE);
 
         this.URLS_HASH = {
-            'CVE': this.RECOMMENDER_API_BASE + 'api/v1/depeditor-cve-analyses/',
+            'CVE': this.RECOMMENDER_API_BASE + 'api/v1/depeditor-cve-analyses',
             'LICENSE': this.LICENSE_API_BASE + 'api/v1/license-recommender',
             'DEPEDITORANALYSIS': this.RECOMMENDER_API_BASE + 'api/v1/depeditor-analyses/?persist=false'
         };
@@ -72,8 +81,7 @@ export class DependencyEditorService {
                 .map(this.extractData)
                 .map((data) => {
                     return data;
-                })
-                .catch(this.handleError);
+                });
         });
     }
 
@@ -88,8 +96,7 @@ export class DependencyEditorService {
                 .map((data) => {
                     stackReport = data;
                     return data;
-                })
-                .catch(this.handleError);
+                });
         });
     }
 
@@ -102,8 +109,7 @@ export class DependencyEditorService {
                 .map(this.extractData)
                 .map((data) => {
                     return data;
-                })
-                .catch(this.handleError);
+                });
         });
     }
 
@@ -116,8 +122,7 @@ export class DependencyEditorService {
                 .map(this.extractData)
                 .map((data: StackReportModel | CveResponseModel | LicenseStackAnalysisModel | any) => {
                     return data;
-                })
-                .catch(this.handleError);
+                });
         });
     }
 
@@ -130,8 +135,7 @@ export class DependencyEditorService {
                 .map(this.extractData)
                 .map((data) => {
                     return data;
-                })
-                .catch(this.handleError);
+                });
         });
     }
 
@@ -198,22 +202,5 @@ export class DependencyEditorService {
     private checkForTrailingSlashes(url: string): string {
         if (!url || url.length < 1) return;
         return url[url.length - 1] === '/' ? url : url + '/';
-    }
-
-    private handleError(error: Response | any) {
-        let body: any = {};
-        if (error instanceof Response) {
-            if (error && error.status && error.statusText) {
-                body = {
-                    status: error.status,
-                    statusText: error.statusText
-                };
-            }
-        } else {
-            body = {
-                statusText: error.message ? error.message : error.toString()
-            };
-        }
-        return Observable.throw(body);
     }
 }

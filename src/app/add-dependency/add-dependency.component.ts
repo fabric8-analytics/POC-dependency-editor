@@ -110,7 +110,6 @@ export class AddDependencyComponent implements OnInit, OnDestroy, OnChanges {
                                                     this.dependencySearchResult = response['result'];
                                                     this.isLoading = false;
                                                   }, (error: any) => {
-                                                    // Handle server errors here
                                                     this.errorComponentSearch = this.errorMessageHandler.getErrorMessage(error.status);
                                                     this.isLoading = false;
                                                     console.log('error component search - ', this.errorComponentSearch);

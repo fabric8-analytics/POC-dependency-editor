@@ -297,3 +297,17 @@ export class AlertBox {
         defaultText?: string;
     };
 }
+export class LicenseUIModel {
+    constructor(
+        public licenseData: StackLicenseAnalysisModel = null,
+        public lisData: LicenseStackAnalysisModel = null,
+        public allLicenses: Array<string> = null
+    ) {}
+}
+
+export class ErrorUIModel {
+    constructor(
+        public status: string,
+        public message: string
+    ) {}
+}

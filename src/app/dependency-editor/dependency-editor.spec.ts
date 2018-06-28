@@ -15,6 +15,7 @@ import { URLProvider } from '../shared/url-provider';
 import { DependencyEditorTokenProvider } from '../shared/depeditor-tokenprovider';
 import { DependencyEditorService } from '../shared/dependency-editor.service';
 import { ErrorMessageHandler } from '../shared/error-message-handler';
+import { HttpInterceptor } from '../shared/http-interceptor';
 
 describe('DependencyEditorComponent', () => {
   let component: DependencyEditorComponent;
@@ -41,6 +42,7 @@ describe('DependencyEditorComponent', () => {
      providers: [
         URLProvider,
         DependencyEditorTokenProvider,
+        HttpInterceptor,
         DependencyEditorService,
         ErrorMessageHandler
      ]

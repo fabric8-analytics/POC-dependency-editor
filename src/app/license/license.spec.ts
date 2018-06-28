@@ -8,6 +8,11 @@ import { FormsModule } from '@angular/forms';
 import { AlertBoxModule } from '../alert-box/alert-box.module';
 import { LicenseComponent } from '../license/license.component';
 
+import { DependencyEditorService } from '../shared/dependency-editor.service';
+import { HttpInterceptor } from '../shared/http-interceptor';
+import { URLProvider } from '../shared/url-provider';
+import { DependencyEditorTokenProvider } from '../shared/depeditor-tokenprovider';
+
 describe('LicenseComponent', () => {
   let component: LicenseComponent;
   let fixture: ComponentFixture<LicenseComponent>;
@@ -15,14 +20,20 @@ describe('LicenseComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-         CommonModule,
-         AccordionModule.forRoot(),
-         HttpModule,
-         FormsModule,
-         AlertBoxModule
+        CommonModule,
+        AccordionModule.forRoot(),
+        HttpModule,
+        FormsModule,
+        AlertBoxModule
      ],
       declarations: [
-         LicenseComponent
+        LicenseComponent
+     ],
+     providers: [
+      HttpInterceptor,
+      DependencyEditorService,
+      URLProvider,
+      DependencyEditorTokenProvider
      ]
     }).compileComponents();
   }));
