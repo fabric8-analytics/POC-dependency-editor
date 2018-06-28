@@ -140,13 +140,12 @@
                       <input type="checkbox" [disabled]="master.grouped" [checked]="master.type" (change)="changeTagname(master,master.type)">
                   </div>
                   <div class="list-view-pf-main-info">
-                    <div class="list-view-pf-body">
+                    <div class="list-view-pf-body-container">
+                        <div class="list-view-pf-body">
                       <div class="col-sm-3 list-view-pf-description">
                         <div class="list-group-item-heading">
                           <label class="control control--checkbox">{{master.name}}
                           </label>
-                        </div>
-                        <div class="list-group-item-text">
                         </div>
                         <div>
                           <div>
@@ -172,6 +171,14 @@
                           </strong>
                           <span id="sec">Security</span>
                         </div>
+                      </div>
+                      </div>
+                      <div class="list-group-item-text">
+                        <p *ngIf="!master.showMore" class="description">{{master.description | maxLength: 10}}</p>
+                        <p *ngIf="master.showMore" class="description">{{master.description}}</p>
+                        <a href="javascript:void(0);" (click)="master.showMore = master.showMore === undefined ? true : !master.showMore">
+                          {{master.showMore ? 'Less' : 'More'}}
+                        </a> 
                       </div>
                     </div>
                   </div>
