@@ -2,7 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { InsightComponent } from './insights.component';
 import { CommonModule } from '@angular/common';
-import { AccordionModule } from 'ngx-bootstrap';
+import { AccordionModule, TooltipModule } from 'ngx-bootstrap';
 import { HttpModule } from '@angular/http';
 import { FormsModule } from '@angular/forms';
 import { ListElementModule } from '../list-element/list-element.module';
@@ -16,6 +16,7 @@ describe('InsightComponent', () => {
       imports: [
           CommonModule,
           AccordionModule.forRoot(),
+          TooltipModule.forRoot(),
           HttpModule,
           FormsModule,
           ListElementModule

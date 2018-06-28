@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AccordionModule } from 'ngx-bootstrap';
+import { AccordionModule, TooltipModule } from 'ngx-bootstrap';
 import { HttpModule } from '@angular/http';
 import { FormsModule } from '@angular/forms';
 import { ModalModule } from 'ngx-modal';
@@ -19,6 +19,7 @@ import { ErrorMessageHandler } from '../shared/error-message-handler';
  imports: [
     CommonModule,
     AccordionModule.forRoot(),
+    TooltipModule.forRoot(),
     HttpModule,
     FormsModule,
     ModalModule,

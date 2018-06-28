@@ -33,8 +33,14 @@
                 </a>
               </li>
             </ul>
-            <div class="col-sm-5 browse" (click)="showPackageModal($event)" *ngIf="existDependencies?.length">Browse All Dependencies</div>
-            <div class="col-sm-5 browse ubrowse" *ngIf="!existDependencies">Browse All Dependencies</div>
+            <div class="col-sm-5 browse"
+                (click)="showPackageModal($event)"
+                *ngIf="existDependencies?.length"
+                tooltip="Lists all the dependencies for the selected runtime {{boosterInfo?.runtime?.name ? '-' + boosterInfo.runtime.name : ''}}">
+                Browse All Dependencies
+            </div>
+            <div class="col-sm-5 browse ubrowse"
+                *ngIf="!existDependencies">Browse All Dependencies</div>
           </div>
         </h2>
         <section class="fit dependency-strech">
