@@ -10,7 +10,7 @@ export class FilterPipe implements PipeTransform {
             if (input.indexOf('$$') !== -1) {
                 let cat = input.split('$$')[0];
                 if (cat !== 'All') {
-                    return value.filter((i: any) => i.category === cat);
+                    return value.filter((i: any) => i.category.indexOf(cat) !== -1);
                 }
                 return value;
             }

@@ -116,6 +116,17 @@ export class AddDependencyComponent implements OnInit, OnDestroy, OnChanges {
                                                 });
   }
 
+  /**
+   *
+   * @param packages [Array<any>]
+   * @returns count [number]
+   *
+   * This function checks for the packages and ignores if they are the part of core dependencies
+   */
+  getPackageCount(packages: Array<any>): number {
+    return packages && packages.filter((p: any) => !this.isACoreDependency(p.name)).length || 0;
+  }
+
   getCategories() {
     this.isLoading = true;
     let runtime = '';
@@ -313,26 +324,40 @@ export class AddDependencyComponent implements OnInit, OnDestroy, OnChanges {
     this.categoriesStore[index].isOpened = true;
   }
 
+  public setToObject(container: any, currentPackage: any): void {
+    if (container && currentPackage) {
+      if (!container[currentPackage.name]) {
+        container[currentPackage.name] = {
+          'version' : currentPackage.version,
+          'name' : currentPackage.name,
+          'description': currentPackage.description,
+          'category' : [currentPackage.category],
+          'type' : false,
+          'grouped' : false,
+          'security' : null,
+          'present' : false
+        };
+      } else {
+        container[currentPackage.name]['category'].push(currentPackage.category);
+      }
+    }
+  }
+
   public addedTags() {
     let count = 0;
     this.tagZero = 0;
+    let packs: any = {};
     this.categoryResult.forEach((i: any) => {
-      count += i.packages.length || 0;
       i.packages.forEach((x: any) => {
-        if (!this.isACoreDependency(x)) {
-          this.masterTags.push({
-            'ecosystem' : DependencySnapshot.ECOSYSTEM,
-            'version' : x.version,
-            'name' : x.name,
-            'description': x.description,
-            'category' : x.category,
-            'type' : false,
-            'grouped' : false,
-            'security' : null,
-            'present' : false
-          });
+        if (!this.isACoreDependency(x.name)) {
+          this.setToObject(packs, x);
         }
       });
+    });
+    Object.keys(packs).forEach((name: string) => {
+      ++ count;
+      packs[name]['ecosystem'] = DependencySnapshot.ECOSYSTEM;
+      this.masterTags.push(packs[name]);
     });
     this.tagZero = count;
     this.categoryResult.forEach((i: any) => {
@@ -365,7 +390,7 @@ export class AddDependencyComponent implements OnInit, OnDestroy, OnChanges {
   }
   }
 
-  private isACoreDependency(dependency: any): boolean {
-    return this.existDependencies && this.existDependencies.filter((a: DependencySnapshotItem) => a.package === dependency.name).length !== 0;
+  private isACoreDependency(name: string): boolean {
+    return this.existDependencies && this.existDependencies.filter((a: DependencySnapshotItem) => a.package === name).length !== 0;
   }
 }

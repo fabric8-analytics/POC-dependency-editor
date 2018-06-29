@@ -138,7 +138,6 @@ export class LicenseComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    debugger;
     this.handleChanges();
   }
 
