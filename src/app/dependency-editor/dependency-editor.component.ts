@@ -208,7 +208,6 @@ export class DependencyEditorComponent implements OnInit, OnChanges, OnDestroy {
   private setLicenseData(result: ResultInformationModel) {
     this.licenseData = result.user_stack_info.license_analysis;
     this.allLicenses = result.user_stack_info.distinct_licenses;
-    debugger;
     this.service.licenseSubscription.next(new LicenseUIModel(this.licenseData, null, this.allLicenses));
   }
 
