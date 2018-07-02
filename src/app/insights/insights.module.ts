@@ -20,6 +20,7 @@ import {
     InsightComponent
 } from './insights.component';
 import { TooltipModule } from 'ngx-bootstrap/tooltip/tooltip.module';
+import { DependencyEditorService } from '../shared/dependency-editor.service';
 
 
 @NgModule({
@@ -37,6 +38,8 @@ import { TooltipModule } from 'ngx-bootstrap/tooltip/tooltip.module';
     exports: [
         InsightComponent
     ],
-    providers: []
+    providers: [
+        DependencyEditorService
+    ]
 })
 export class InsightModule {}

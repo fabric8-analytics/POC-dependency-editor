@@ -4,7 +4,7 @@
       <p class="insights">
         <span class="pficon-zone"></span>
         <span class="title">Insights</span>
-        <span class="badge" *ngIf="companions || alternate">{{(companions?.length || 0) + (alternate?.length || 0) }}</span>
+        <span class="badge" *ngIf="usableCompanions || alternate">{{(usableCompanions?.length || 0) + (alternate?.length || 0) }}</span>
         <span class="add">
           <button class="added"
                   (click)="addCompanion()" [ngStyle]="{'border': noOfTags > 0 ? '1px solid #00659c' : '1px solid #d1d1d1' , 'background-image': noOfTags > 0 ? 'linear-gradient(-180deg, #39a5dc 0%, #0088ce 100%)' : 'none','color': noOfTags > 0 ? '#fff' : '#8b8d8f'}"
@@ -23,8 +23,8 @@
     </div>
     <div *ngIf="boosterInfo">
       <div class="col-sm-12 fit">
-        <div class="card-pf-body" *ngIf="companions?.length">
-          <app-list-element (companionAdded)="companionWasAdded($event)" *ngFor="let companion of companions" [dependency]="companion"
+        <div class="card-pf-body" *ngIf="usableCompanions?.length">
+          <app-list-element (companionAdded)="companionWasAdded($event)" *ngFor="let companion of usableCompanions" [dependency]="companion"
             (companionRemoved)="removeCompanion($event)" (tagAdded)="addTag($event)" (companionReleased)="releaseCompanion($event)"></app-list-element>
         </div>
         <div class="card-pf-body" *ngIf="alternate?.length">
@@ -32,11 +32,11 @@
             (companionRemoved)="removeCompanion($event)" (tagAdded)="addTag($event)" (companionReleased)="releaseCompanion($event)"></app-list-element>
         </div>
         <div class="card-pf-body">
-          <div class="pre-loader" *ngIf="(!companions || !alternate) && !error">
+          <div class="pre-loader" *ngIf="(!usableCompanions || !alternate) && !error">
             <div class="pre-loader-spinner spinner spinner-lg"></div>
             <span class="loader-text">Retrieving insights based on the dependencies ...</span>
           </div>
-          <p class="card-pf-aggregate-status-notifications" *ngIf="companions?.length === 0 && alternate?.length === 0 && !error">
+          <p class="card-pf-aggregate-status-notifications" *ngIf="usableCompanions?.length === 0 && alternate?.length === 0 && !error">
             <span class="card-pf-aggregate-status-notification">
               <span class="pficon pficon-info"></span>
               <h1 class="insight-info">No Insights Found</h1>
