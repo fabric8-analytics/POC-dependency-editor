@@ -41,6 +41,7 @@ import {
 } from '../utils/dependency-snapshot';
 import { FilterPipe } from './add-dependency.pipe';
 import { Subscription } from 'rxjs/Subscription';
+import { SimpleChanges } from '@angular/core/src/metadata/lifecycle_hooks';
 
 @Component({
   selector: 'app-add-dependency',
@@ -92,9 +93,15 @@ export class AddDependencyComponent implements OnInit, OnDestroy, OnChanges {
     private errorMessageHandler: ErrorMessageHandler) {}
 
   ngOnInit() {
+    this.masterTags = [];
+    this.getCategories();
   }
 
-  ngOnChanges() {
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes && changes['boosterInfo'] && changes['boosterInfo']['currentValue']) {
+      this.masterTags = [];
+      this.getCategories();
+    }
   }
 
   getDependencies() {
@@ -127,42 +134,52 @@ export class AddDependencyComponent implements OnInit, OnDestroy, OnChanges {
     return packages && packages.filter((p: any) => !this.isACoreDependency(p.name)).length || 0;
   }
 
-  getCategories() {
-    this.isLoading = true;
-    let runtime = '';
-    if (this.boosterInfo.runtime.id === 'vert.x') {
-      runtime = 'vertx';
-    } else if (this.boosterInfo.runtime.id === 'spring-boot') {
-      runtime = 'springboot';
-    } else if (this.boosterInfo.runtime.id === 'wildfly-swarm') {
-      runtime = 'wildflyswarm';
-    }
-    this.service.getCategories(runtime)
-      .subscribe((response: any) => {
-        this.categorySearchResult = response['categories'];
-        this.isLoading = false;
-        this.categoryResult = [];
-        this.categoriesStore = [];
-        this.categoriesStore.push({
-          isOpened: true
-        });
-        for (const key in this.categorySearchResult) {
-          if (this.categorySearchResult.hasOwnProperty(key)) {
-            this.categoryResult.push(this.categorySearchResult[key]);
-            this.categoriesStore.push({
-              isOpened: false
-            });
-          }
-        }
-        const p = this.getCategoryPayload(this.categoryResult);
-        this.getCategoriesSecurity(p);
-        this.addedTags();
-      }, (error: any) => {
-        // Handle server errors here
-        this.isLoading = false;
-        this.errorCategories =  this.errorMessageHandler.getErrorMessage(error.status);
-        console.log('error categories - ', this.errorCategories);
+  handleModalCategories(categories: any): void {
+    if (!categories) return;
+
+    this.categorySearchResult = categories;
+    this.isLoading = false;
+    this.categoriesStore = [];
+    this.categoriesStore.push({
+      isOpened: true
     });
+
+    for (const key in this.categorySearchResult) {
+      if (this.categorySearchResult.hasOwnProperty(key)) {
+        this.categoryResult.push(this.categorySearchResult[key]);
+        this.categoriesStore.push({
+          isOpened: false
+        });
+      }
+    }
+    if (this.masterTags.length === 0) {
+      const p = this.getCategoryPayload(this.categoryResult);
+      this.getCategoriesSecurity(p);
+    }
+    this.addedTags();
+  }
+
+  getCategories() {
+    if (this.boosterInfo) {
+      this.isLoading = true;
+      let runtime = '';
+      if (this.boosterInfo.runtime.id === 'vert.x') {
+        runtime = 'vertx';
+      } else if (this.boosterInfo.runtime.id === 'spring-boot') {
+        runtime = 'springboot';
+      } else if (this.boosterInfo.runtime.id === 'wildfly-swarm') {
+        runtime = 'wildflyswarm';
+      }
+      this.service.getCategories(runtime)
+        .subscribe((response: any) => {
+          this.handleModalCategories(response['categories']);
+        }, (error: any) => {
+          // Handle server errors here
+          this.isLoading = false;
+          this.errorCategories =  this.errorMessageHandler.getErrorMessage(error.status);
+          console.log('error categories - ', this.errorCategories);
+      });
+    }
   }
 
   resetCategoryStore(fromIndex: number): void {
@@ -304,7 +321,7 @@ export class AddDependencyComponent implements OnInit, OnDestroy, OnChanges {
   public showPackageModal(event: Event) {
     this.toast = false;
     this.modalPackagePreview.open();
-    this.getCategories();
+    this.handleModalCategories(this.categorySearchResult);
   }
 
   public closemodal() {
