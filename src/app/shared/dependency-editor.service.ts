@@ -49,6 +49,8 @@ export class DependencyEditorService {
     securitySubscription: Subject<CveResponseModel | ErrorUIModel> = new Subject<CveResponseModel | ErrorUIModel>();
     needsSecurityChange: Subject<boolean> = new Subject<boolean>();
 
+    cacheHiddenDependency: Array<any> = [];
+
     private RECOMMENDER_API_BASE: string = '';
     private LICENSE_API_BASE: string = '';
 

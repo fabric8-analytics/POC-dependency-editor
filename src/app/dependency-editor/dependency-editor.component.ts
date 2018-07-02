@@ -126,6 +126,7 @@ export class DependencyEditorComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnDestroy() {
     DepEditorUtils.isLoaded = false;
+    this.service.cacheHiddenDependency = [];
   }
 
   public doContinue() {

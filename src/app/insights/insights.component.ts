@@ -4,6 +4,7 @@ import {
   OnChanges,
   Input,
   Output,
+  SimpleChanges,
   EventEmitter,
   ViewEncapsulation
 } from '@angular/core';
@@ -18,6 +19,7 @@ import * as _ from 'lodash';
 import {
   ComponentInformationModel, EventDataModel, BoosterInfo, ErrorUIModel
 } from '../model/data.model';
+import { DependencyEditorService } from '../shared/dependency-editor.service';
 
 @Component({
   selector: 'app-insights',
@@ -38,11 +40,33 @@ export class InsightComponent implements OnInit, OnChanges {
   public added: Array<any> = [];
   public noOfTags: number = 0;
 
-  constructor() { }
+  public usableCompanions: Array<ComponentInformationModel>;
 
-  ngOnChanges() { }
+  constructor(private service: DependencyEditorService) { }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes) {
+      if (changes['companions'] && changes['companions']['currentValue']) {
+        this.usableCompanions = _.cloneDeep(this.companions.filter((c: ComponentInformationModel) => this.filterOut(c)));
+      }
+    }
+  }
 
   ngOnInit() { }
+
+  filterOut(companion: ComponentInformationModel): boolean {
+    if (companion) {
+      let cache: Array<ComponentInformationModel> = this.service.cacheHiddenDependency;
+      let len: number = cache.length;
+      for (let i = 0; i < len; ++ i) {
+        if (cache[i].name === companion.name) {
+          return false;
+        }
+      }
+      return true;
+    }
+    return false;
+  }
 
   public addTag(eventData: Array<any>) {
     for (let i = 0; i < this.companions.length + this.alternate.length; i++) {
@@ -119,7 +143,8 @@ export class InsightComponent implements OnInit, OnChanges {
   }
 
   public removeCompanion(dependency: ComponentInformationModel) {
-    _.remove(this.companions, (companion) => {
+    this.service.cacheHiddenDependency.push(dependency);
+    _.remove(this.usableCompanions, (companion) => {
       return companion.name === dependency.name;
     });
   }

@@ -6,6 +6,10 @@ import { AccordionModule, TooltipModule } from 'ngx-bootstrap';
 import { HttpModule } from '@angular/http';
 import { FormsModule } from '@angular/forms';
 import { ListElementModule } from '../list-element/list-element.module';
+import { DependencyEditorService } from '../shared/dependency-editor.service';
+import { HttpInterceptor } from '../shared/http-interceptor';
+import { URLProvider } from '../shared/url-provider';
+import { DependencyEditorTokenProvider } from '../shared/depeditor-tokenprovider';
 
 describe('InsightComponent', () => {
   let component: InsightComponent;
@@ -23,6 +27,12 @@ describe('InsightComponent', () => {
       ],
       declarations: [
           InsightComponent
+      ],
+      providers: [
+        DependencyEditorService,
+        HttpInterceptor,
+        URLProvider,
+        DependencyEditorTokenProvider
       ]
     })
     .compileComponents();
