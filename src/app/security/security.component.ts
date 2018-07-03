@@ -44,19 +44,22 @@ export class SecurityComponent implements OnInit, OnChanges {
   constructor(private service: DependencyEditorService) {
     this.isLoading = true;
     this.service.securitySubscription.subscribe((response: CveResponseModel | ErrorUIModel) => {
-      if (response instanceof CveResponseModel) {
-        this.formAlert();
-      } else if (response instanceof ErrorUIModel) {
+      if (response instanceof ErrorUIModel) {
         this.config = {
-          header: {
-            icon: this.icon,
-            name: this.title
-          },
-          body: {
-            defaultText: response.message
-          }
-      };
-      this.alertConfig = <AlertBox> this.config;
+            header: {
+              icon: this.icon,
+              name: this.title
+            },
+            body: {
+              defaultText: response.message
+            }
+        };
+        this.alertConfig = <AlertBox> this.config;
+      } else {
+        let res: any = response;
+        if (res['request_id'] && res['stack_highest_cvss']) {
+          this.formAlert();
+        }
       }
 
       this.isLoading = false;
@@ -103,9 +106,11 @@ export class SecurityComponent implements OnInit, OnChanges {
       if (this.noOfCves > 0) {
         this.itSecurity = false;
       }
+
       this.config = {
           header: {
             icon: this.icon,
+            tooltip: 'Shows the security vulnerabilities in the stack',
             name: this.title,
             countInfo: this.noOfCves,
             indicator: this.itSecurity === false ? 'ERROR' : ''
@@ -130,24 +135,6 @@ export class SecurityComponent implements OnInit, OnChanges {
 
 
 
-    // Forms configuration to make use of alert-box component
-
-  this.config = {
-      header: {
-        icon: this.icon,
-        tooltip: 'Shows the security vulnerabilities in the stack',
-        name: this.title,
-        countInfo: this.noOfCves,
-        indicator: this.itSecurity === false ? 'ERROR' : ''
-      },
-      body: {
-        normal: this.cveName,
-        defaultText: this.noOfCves === 0 ? 'The analytics engine has not identified any security issues affecting your stack.' : ''
-      }
-  };
-
-
-
   this.alertConfig = <AlertBox> this.config;
     this.isLoading = false;
   }
@@ -161,7 +148,7 @@ export class SecurityComponent implements OnInit, OnChanges {
     this.isLoading = true;
     this.service.getDependencyData('CVE', payload)
       .subscribe((response: CveResponseModel) => {
-        this.service.securitySubscription.next(response);
+        this.service.securitySubscription.next((<CveResponseModel> response));
         this.isLoading = false;
       }, (error: any) => {
         this.cveData = null;
