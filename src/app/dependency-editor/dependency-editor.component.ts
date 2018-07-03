@@ -37,7 +37,8 @@ import {
   LicenseStackAnalysisModel,
   BoosterInfo,
   ErrorUIModel,
-  LicenseUIModel
+  LicenseUIModel,
+  RecommendationsModel
 } from '../model/data.model';
 import {
   DependencySnapshot
@@ -200,9 +201,11 @@ export class DependencyEditorComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-  private setCompanions(result: ResultInformationModel) {
-    if (result && result.recommendation && result.recommendation.companion) {
-      this.companions = result.recommendation.companion;
+  private setCompanions(result: RecommendationsModel) {
+    if (result && result.companion) {
+      this.companions = result.companion;
+    } else {
+      this.companions = null;
     }
   }
 
@@ -212,9 +215,9 @@ export class DependencyEditorComponent implements OnInit, OnChanges, OnDestroy {
     this.service.licenseSubscription.next(new LicenseUIModel(this.licenseData, null, this.allLicenses));
   }
 
-  private setAlternate(result: ResultInformationModel) {
-    if (result && result.recommendation && result.recommendation.alternate) {
-      this.alternate = result.recommendation.alternate;
+  private setAlternate(result: RecommendationsModel) {
+    if (result && result.alternate) {
+      this.alternate = result.alternate;
     }
   }
 
@@ -242,9 +245,12 @@ export class DependencyEditorComponent implements OnInit, OnChanges, OnDestroy {
                 DependencySnapshot.ECOSYSTEM = result.user_stack_info.ecosystem;
                 DependencySnapshot.DEP_SNAPSHOT = result.user_stack_info.dependencies;
                 DependencySnapshot.REQUEST_ID = response.request_id;
+                if (rec) {
+                  alive = false;
+                  this.setCompanions(rec);
+                  this.setAlternate(rec);
+                }
                 this.setDependencies(result);
-                this.setCompanions(result);
-                this.setAlternate(result);
                 this.setLicenseData(result);
                 this.emitSecurityChangeNeeded();
               }
@@ -300,13 +306,18 @@ export class DependencyEditorComponent implements OnInit, OnChanges, OnDestroy {
         subs = observable.subscribe((response: StackReportModel) => {
           rec = response && response.result && response.result[0] || null;
           if (rec) {
-            this.setCompanions(response.result[0]);
-            this.setAlternate(response.result[0]);
-            this.checkIfAlternatePresent(response.result[0].recommendation.alternate);
+            if (rec.recommendation) {
+              let recommendation: RecommendationsModel = response.result[0].recommendation;
+              alive = false;
+              this.setCompanions(recommendation);
+              this.setAlternate(recommendation);
+              this.checkIfAlternatePresent(recommendation.alternate);
+            }
             this.checkIfSecurityPresent(response.result[0].user_stack_info.analyzed_dependencies);
           }
         }, (error: any) => {
           // Handle server errors here
+          alive = false;
           this.errorInsight = error && error.message;
         });
         if (counter++ > 4) {

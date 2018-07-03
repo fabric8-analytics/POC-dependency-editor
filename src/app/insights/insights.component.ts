@@ -46,8 +46,11 @@ export class InsightComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes) {
-      if (changes['companions'] && changes['companions']['currentValue']) {
-        this.usableCompanions = _.cloneDeep(this.companions.filter((c: ComponentInformationModel) => this.filterOut(c)));
+      if (changes['companions']) {
+        if (changes['companions']['currentValue']) {
+          this.usableCompanions = _.cloneDeep(this.companions.filter((c: ComponentInformationModel) => this.filterOut(c)));
+          this.error = null;
+        }
       }
     }
   }

@@ -94,14 +94,22 @@ export class AddDependencyComponent implements OnInit, OnDestroy, OnChanges {
 
   ngOnInit() {
     this.masterTags = [];
-    this.getCategories();
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes && changes['boosterInfo'] && changes['boosterInfo']['currentValue']) {
-      this.masterTags = [];
+      this.resetValues();
       this.getCategories();
     }
+    if (changes && changes['existDependencies'] && changes['existDependencies']['currentValue']) {
+      this.masterTags = [];
+      this.addedTags();
+    }
+  }
+
+  resetValues(): void {
+    this.categoryResult = [];
+    this.masterTags = [];
   }
 
   getDependencies() {
@@ -139,24 +147,28 @@ export class AddDependencyComponent implements OnInit, OnDestroy, OnChanges {
 
     this.categorySearchResult = categories;
     this.isLoading = false;
-    this.categoriesStore = [];
-    this.categoriesStore.push({
-      isOpened: true
-    });
+    if (this.categoryResult.length === 0) {
+      this.categoriesStore.push({
+        isOpened: true
+      });
 
-    for (const key in this.categorySearchResult) {
-      if (this.categorySearchResult.hasOwnProperty(key)) {
-        this.categoryResult.push(this.categorySearchResult[key]);
-        this.categoriesStore.push({
-          isOpened: false
-        });
+      for (const key in this.categorySearchResult) {
+        if (this.categorySearchResult.hasOwnProperty(key)) {
+          this.categoryResult.push(this.categorySearchResult[key]);
+          this.categoriesStore.push({
+            isOpened: false
+          });
+        }
       }
     }
     if (this.masterTags.length === 0) {
       const p = this.getCategoryPayload(this.categoryResult);
       this.getCategoriesSecurity(p);
     }
-    this.addedTags();
+
+    if (this.existDependencies) {
+      this.addedTags();
+    }
   }
 
   getCategories() {
@@ -355,7 +367,9 @@ export class AddDependencyComponent implements OnInit, OnDestroy, OnChanges {
           'present' : false
         };
       } else {
-        container[currentPackage.name]['category'].push(currentPackage.category);
+        if (container[currentPackage.name]['category'].indexOf(currentPackage.category) === -1) {
+          container[currentPackage.name]['category'].push(currentPackage.category);
+        }
       }
     }
   }
@@ -364,19 +378,22 @@ export class AddDependencyComponent implements OnInit, OnDestroy, OnChanges {
     let count = 0;
     this.tagZero = 0;
     let packs: any = {};
-    this.categoryResult.forEach((i: any) => {
-      i.packages.forEach((x: any) => {
-        if (!this.isACoreDependency(x.name)) {
-          this.setToObject(packs, x);
-        }
+    if (this.masterTags.length === 0) {
+      this.categoryResult.forEach((i: any) => {
+        i.packages.forEach((x: any) => {
+          if (!this.isACoreDependency(x.name)) {
+            this.setToObject(packs, x);
+          }
+        });
       });
-    });
-    Object.keys(packs).forEach((name: string) => {
-      ++ count;
-      packs[name]['ecosystem'] = DependencySnapshot.ECOSYSTEM;
-      this.masterTags.push(packs[name]);
-    });
-    this.tagZero = count;
+      Object.keys(packs).forEach((name: string) => {
+        ++ count;
+        packs[name]['ecosystem'] = DependencySnapshot.ECOSYSTEM;
+        this.masterTags.push(packs[name]);
+      });
+      console.log('Master Tags', this.masterTags);
+      this.tagZero = count;
+    }
     this.categoryResult.forEach((i: any) => {
         i.packages.forEach((x: any) => {
             this.saveTagname.push({'name' : x, 'type' : false});
@@ -396,9 +413,7 @@ export class AddDependencyComponent implements OnInit, OnDestroy, OnChanges {
           this.masterTags[i].grouped = true;
           this.masterTags[i].present = true;
         } else {
-          if (this.masterTags[i].present === true) {
-            continue;
-          } else {
+          if (this.masterTags[i].present !== true) {
             this.masterTags[i].grouped = false;
           }
         }
