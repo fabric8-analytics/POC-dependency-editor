@@ -40,6 +40,7 @@ export class SecurityComponent implements OnInit, OnChanges {
 
   public alertConfig: AlertBox = null;
   private config: any = {};
+  private tooltipText: string = 'Shows the security vulnerabilities in the stack';
 
   constructor(private service: DependencyEditorService) {
     this.isLoading = true;
@@ -47,6 +48,7 @@ export class SecurityComponent implements OnInit, OnChanges {
       if (response instanceof ErrorUIModel) {
         this.config = {
             header: {
+              tooltip: this.tooltipText,
               icon: this.icon,
               name: this.title
             },
@@ -110,7 +112,7 @@ export class SecurityComponent implements OnInit, OnChanges {
       this.config = {
           header: {
             icon: this.icon,
-            tooltip: 'Shows the security vulnerabilities in the stack',
+            tooltip: this.tooltipText,
             name: this.title,
             countInfo: this.noOfCves,
             indicator: this.itSecurity === false ? 'ERROR' : ''
@@ -124,6 +126,7 @@ export class SecurityComponent implements OnInit, OnChanges {
       this.noOfCves = null;
       this.config = {
           header: {
+            tooltip: this.tooltipText,
             icon: this.icon,
             name: this.title
           },
