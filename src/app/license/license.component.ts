@@ -57,6 +57,7 @@ export class LicenseComponent implements OnInit, OnChanges {
   private licenseData: StackLicenseAnalysisModel;
   private lisData: LicenseStackAnalysisModel;
   private allLicenses: Array < any > = [];
+  private tooltipText: string = 'Shows the distinct licenses and the stack license';
 
 
   constructor(private service: DependencyEditorService) {
@@ -74,6 +75,7 @@ export class LicenseComponent implements OnInit, OnChanges {
       } else if (response instanceof ErrorUIModel) {
         this.config = {
           header: {
+            tooltip: this.tooltipText,
             icon: this.icon,
             name: this.title
           },
@@ -191,7 +193,7 @@ export class LicenseComponent implements OnInit, OnChanges {
     },
     size: {
       height: 200,
-      width: 230
+      width: 280
     }
    };
     this.charts['configs'] = {
@@ -207,7 +209,7 @@ export class LicenseComponent implements OnInit, OnChanges {
   this.config = {
     header: {
       icon: this.icon,
-      tooltip: 'Shows the distinct licenses and the stack license',
+      tooltip: this.tooltipText,
       name: this.title,
       secondaryInfo: {
         mainText: this.stackLicense,

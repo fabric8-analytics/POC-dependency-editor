@@ -375,10 +375,10 @@ export class AddDependencyComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   public addedTags() {
-    let count = 0;
-    this.tagZero = 0;
-    let packs: any = {};
     if (this.masterTags.length === 0) {
+      let count = 0;
+      this.tagZero = 0;
+      let packs: any = {};
       this.categoryResult.forEach((i: any) => {
         i.packages.forEach((x: any) => {
           if (!this.isACoreDependency(x.name)) {
