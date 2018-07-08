@@ -12,7 +12,7 @@
           <span class="search-text" id="search-text">Dependencies are added automatically based on the mission and runtime you select. Search or browse to add additional dependencies.</span>
           <div class="row">
             <div id="date-2" class="input-group date col-sm-7">
-              <input type="text" class="form-control bootstrap-datepicker" [(ngModel)]="dependencySearchString" (keyup)="getDependencies()" (change)="listenInputSearch()"
+              <input type="text" class="form-control bootstrap-datepicker" [(ngModel)]="dependencySearchString" (keyup)="getDependencies()" (change)="listenInputSearch()" (click)="searchDependenciesClicked()"
                 placeholder="Web, Devtools, SQL...">
               <span class="input-group-addon" (click)="getDependencies()">
                 <span class="pficon-search"></span>
