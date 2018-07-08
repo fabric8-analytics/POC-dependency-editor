@@ -42,6 +42,7 @@ import {
 import { FilterPipe } from './add-dependency.pipe';
 import { Subscription } from 'rxjs/Subscription';
 import { SimpleChanges } from '@angular/core/src/metadata/lifecycle_hooks';
+import { broadcast } from '../shared/telemetry.decorator';
 
 @Component({
   selector: 'app-add-dependency',
@@ -130,6 +131,9 @@ export class AddDependencyComponent implements OnInit, OnDestroy, OnChanges {
                                                     console.log('error component search - ', this.errorComponentSearch);
                                                 });
   }
+
+  @broadcast('searchDependenciesClicked', {})
+  searchDependenciesClicked() {}
 
   /**
    *
@@ -330,6 +334,7 @@ export class AddDependencyComponent implements OnInit, OnDestroy, OnChanges {
     this.service.removeDependency(dependency);
   }
 
+  @broadcast('browseAllDependenciesClicked', {})
   public showPackageModal(event: Event) {
     this.toast = false;
     this.modalPackagePreview.open();
