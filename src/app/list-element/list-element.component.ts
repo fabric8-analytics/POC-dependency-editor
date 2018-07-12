@@ -18,7 +18,6 @@ import * as _ from 'lodash';
 import { ComponentInformationModel, StackReportModel, EventDataModel } from '../model/data.model';
 import { DependencyEditorService } from '../shared/dependency-editor.service';
 import { DependencySnapshot } from '../utils/dependency-snapshot';
-import { broadcast } from '../shared/telemetry.decorator';
 
 @Component({
   selector: 'app-list-element',
@@ -76,12 +75,10 @@ export class ListElementComponent implements OnInit {
     };
   }
 
-  @broadcast('companionDependencyRemoved', {})
   removeCompanion() {
     this.companionRemoved.emit(this.dependency);
   }
 
-  @broadcast('browsedDependencyRemoved', {})
   removeDependency() {
     this.service.removeDependency(this.dependency);
   }

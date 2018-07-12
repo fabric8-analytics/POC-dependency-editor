@@ -20,7 +20,6 @@ import {
   ComponentInformationModel, EventDataModel, BoosterInfo, ErrorUIModel
 } from '../model/data.model';
 import { DependencyEditorService } from '../shared/dependency-editor.service';
-import { broadcast } from '../shared/telemetry.decorator';
 
 @Component({
   selector: 'app-insights',
@@ -125,7 +124,6 @@ export class InsightComponent implements OnInit, OnChanges {
     }
   }
 
-  @broadcast('addDependenciesButtonClicked', {})
   public addCompanion() {
     for (let i = 0; i < this.added.length; i++) {
       if (this.added[i].type === true) {
