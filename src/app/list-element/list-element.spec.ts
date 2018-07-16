@@ -9,6 +9,8 @@ import { URLProvider } from '../shared/url-provider';
 import { DependencyEditorTokenProvider } from '../shared/depeditor-tokenprovider';
 import { DependencyEditorService } from '../shared/dependency-editor.service';
 import { HttpInterceptor } from '../shared/http-interceptor';
+import { TelemetryService } from '../shared/telemetry.service';
+import { InsightComponent } from '../insights/insights.component';
 
 describe('ListElementComponent', () => {
   let component: ListElementComponent;
@@ -29,7 +31,11 @@ describe('ListElementComponent', () => {
         URLProvider,
         HttpInterceptor,
         DependencyEditorTokenProvider,
-        DependencyEditorService
+        DependencyEditorService,
+        TelemetryService,
+        {
+          provide: InsightComponent, useValue: {}
+        }
       ]
     }).compileComponents();
   }));

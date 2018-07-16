@@ -15,6 +15,8 @@ import { DependencyEditorTokenProvider } from '../shared/depeditor-tokenprovider
 import { ErrorMessageHandler } from '../shared/error-message-handler';
 import { TooltipModule } from 'ngx-bootstrap/tooltip/tooltip.module';
 import { HttpInterceptor } from '../shared/http-interceptor';
+import { TelemetryService } from '../shared/telemetry.service';
+import { DependencyEditorComponent } from '../dependency-editor/dependency-editor.component';
 
 describe('AddDependencyComponent', () => {
   let component: AddDependencyComponent;
@@ -41,7 +43,11 @@ describe('AddDependencyComponent', () => {
       DependencyEditorTokenProvider,
       HttpInterceptor,
       DependencyEditorService,
-      ErrorMessageHandler
+      ErrorMessageHandler,
+      TelemetryService,
+      {
+        provide: DependencyEditorComponent, useValue: {}
+      }
      ]
      }).compileComponents();
   }));

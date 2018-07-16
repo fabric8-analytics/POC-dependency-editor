@@ -6,7 +6,7 @@ import {
   Output,
   SimpleChanges,
   EventEmitter,
-  ViewEncapsulation
+  Host
 } from '@angular/core';
 import {
   FormsModule
@@ -20,6 +20,8 @@ import {
   ComponentInformationModel, EventDataModel, BoosterInfo, ErrorUIModel
 } from '../model/data.model';
 import { DependencyEditorService } from '../shared/dependency-editor.service';
+import { TelemetryService } from '../shared/telemetry.service';
+import { DependencyEditorComponent } from '../dependency-editor/dependency-editor.component';
 
 @Component({
   selector: 'app-insights',
@@ -42,7 +44,10 @@ export class InsightComponent implements OnInit, OnChanges {
 
   public usableCompanions: Array<ComponentInformationModel>;
 
-  constructor(private service: DependencyEditorService) { }
+  constructor(
+    @Host() public dependencyEditorComponent: DependencyEditorComponent,
+    private service: DependencyEditorService,
+    private telemetryService: TelemetryService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes) {
@@ -125,6 +130,7 @@ export class InsightComponent implements OnInit, OnChanges {
   }
 
   public addCompanion() {
+    this.telemetryService.broadcast(this.dependencyEditorComponent.broadcaster, 'addDependenciesButtonClicked');
     for (let i = 0; i < this.added.length; i++) {
       if (this.added[i].type === true) {
         this.companionAdded.emit(this.objToEmit[i]);

@@ -16,6 +16,7 @@ import { DependencyEditorService } from '../shared/dependency-editor.service';
 import { URLProvider } from '../shared/url-provider';
 import { ErrorMessageHandler } from '../shared/error-message-handler';
 import { HttpInterceptor } from '../shared/http-interceptor';
+import { TelemetryService } from '../shared/telemetry.service';
 
 @NgModule({
  imports: [
@@ -42,7 +43,8 @@ import { HttpInterceptor } from '../shared/http-interceptor';
     DependencyEditorTokenProvider,
     DependencyEditorService,
     ErrorMessageHandler,
-    HttpInterceptor
+    HttpInterceptor,
+    TelemetryService
  ]
 })
 export class DependencyEditorModule {}

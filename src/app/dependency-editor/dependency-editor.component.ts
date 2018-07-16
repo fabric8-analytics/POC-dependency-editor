@@ -7,7 +7,6 @@ import {
   Input,
   Output,
   EventEmitter,
-  ViewEncapsulation,
   ViewChild
 } from '@angular/core';
 import {
@@ -47,6 +46,7 @@ import { TimerObservable } from 'rxjs/observable/TimerObservable';
 import 'rxjs/add/operator/takeWhile';
 
 import { DepEditorUtils } from '../shared/utils';
+import { Broadcaster } from 'ngx-base';
 
 
 @Component({
@@ -60,6 +60,7 @@ export class DependencyEditorComponent implements OnInit, OnChanges, OnDestroy {
   @Input() githubRef = '';
   @Input() metadataInfo: any = null;
   @Input() blankResponse: any= null;
+  @Input() broadcaster: Broadcaster;
 
   @Output() depSnapshot: EventEmitter<any> = new EventEmitter<any>();
   @Output() emitMetadata: EventEmitter<any> = new EventEmitter<any>();

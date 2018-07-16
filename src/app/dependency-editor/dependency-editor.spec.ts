@@ -16,6 +16,7 @@ import { DependencyEditorTokenProvider } from '../shared/depeditor-tokenprovider
 import { DependencyEditorService } from '../shared/dependency-editor.service';
 import { ErrorMessageHandler } from '../shared/error-message-handler';
 import { HttpInterceptor } from '../shared/http-interceptor';
+import { TelemetryService } from '../shared/telemetry.service';
 
 describe('DependencyEditorComponent', () => {
   let component: DependencyEditorComponent;
@@ -44,7 +45,8 @@ describe('DependencyEditorComponent', () => {
         DependencyEditorTokenProvider,
         HttpInterceptor,
         DependencyEditorService,
-        ErrorMessageHandler
+        ErrorMessageHandler,
+        TelemetryService
      ]
     }).compileComponents();
   }));
