@@ -10,6 +10,8 @@ import { DependencyEditorService } from '../shared/dependency-editor.service';
 import { HttpInterceptor } from '../shared/http-interceptor';
 import { URLProvider } from '../shared/url-provider';
 import { DependencyEditorTokenProvider } from '../shared/depeditor-tokenprovider';
+import { TelemetryService } from '../shared/telemetry.service';
+import { DependencyEditorComponent } from '../dependency-editor/dependency-editor.component';
 
 describe('InsightComponent', () => {
   let component: InsightComponent;
@@ -32,7 +34,11 @@ describe('InsightComponent', () => {
         DependencyEditorService,
         HttpInterceptor,
         URLProvider,
-        DependencyEditorTokenProvider
+        DependencyEditorTokenProvider,
+        TelemetryService,
+        {
+          provide: DependencyEditorComponent, useValue: {}
+        }
       ]
     })
     .compileComponents();

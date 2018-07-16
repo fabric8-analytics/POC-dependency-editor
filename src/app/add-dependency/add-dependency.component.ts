@@ -3,12 +3,10 @@ import {
   OnInit,
   OnChanges,
   Input,
-  Output,
-  EventEmitter,
-  NgModule,
   ViewEncapsulation,
   OnDestroy,
-  ViewChild
+  ViewChild,
+  Host
 } from '@angular/core';
 import {
   CommonModule
@@ -42,6 +40,8 @@ import {
 import { FilterPipe } from './add-dependency.pipe';
 import { Subscription } from 'rxjs/Subscription';
 import { SimpleChanges } from '@angular/core/src/metadata/lifecycle_hooks';
+import { TelemetryService } from '../shared/telemetry.service';
+import { DependencyEditorComponent } from '../dependency-editor/dependency-editor.component';
 
 @Component({
   selector: 'app-add-dependency',
@@ -89,8 +89,10 @@ export class AddDependencyComponent implements OnInit, OnDestroy, OnChanges {
   private addDependencySubscription: Subscription = null;
 
   constructor(
+    @Host() private dependencyEditorComponent: DependencyEditorComponent,
     private service: DependencyEditorService,
-    private errorMessageHandler: ErrorMessageHandler) {}
+    private errorMessageHandler: ErrorMessageHandler,
+    private telemetryService: TelemetryService) {}
 
   ngOnInit() {
     this.masterTags = [];
@@ -334,6 +336,7 @@ export class AddDependencyComponent implements OnInit, OnDestroy, OnChanges {
     this.toast = false;
     this.modalPackagePreview.open();
     this.handleModalCategories(this.categorySearchResult);
+    this.telemetryService.broadcast(this.dependencyEditorComponent.broadcaster, 'browseAllDependenciesClicked');
   }
 
   public closemodal() {
@@ -420,6 +423,10 @@ export class AddDependencyComponent implements OnInit, OnDestroy, OnChanges {
       }
     });
   }
+  }
+
+  searchDependenciesClicked() {
+    this.telemetryService.broadcast(this.dependencyEditorComponent.broadcaster, 'searchDependenciesClicked');
   }
 
   private isACoreDependency(name: string): boolean {

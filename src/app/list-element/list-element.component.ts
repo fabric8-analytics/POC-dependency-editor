@@ -1,11 +1,10 @@
 import {
   Component,
   OnInit,
-  OnChanges,
   Input,
   Output,
   EventEmitter,
-  ViewEncapsulation
+  Host
 } from '@angular/core';
 import {
   FormsModule
@@ -18,6 +17,8 @@ import * as _ from 'lodash';
 import { ComponentInformationModel, StackReportModel, EventDataModel } from '../model/data.model';
 import { DependencyEditorService } from '../shared/dependency-editor.service';
 import { DependencySnapshot } from '../utils/dependency-snapshot';
+import { TelemetryService } from '../shared/telemetry.service';
+import { InsightComponent } from '../insights/insights.component';
 
 @Component({
   selector: 'app-list-element',
@@ -38,7 +39,10 @@ export class ListElementComponent implements OnInit {
   public saveTagname: boolean = false;
   public isOpen: boolean = false;
 
-  constructor(private service: DependencyEditorService) {
+  constructor(
+    @Host() private insightComponent: InsightComponent,
+    private service: DependencyEditorService,
+    private telemetryService: TelemetryService) {
   }
 
   ngOnInit() {
@@ -76,10 +80,12 @@ export class ListElementComponent implements OnInit {
   }
 
   removeCompanion() {
+    this.telemetryService.broadcast(this.insightComponent.dependencyEditorComponent.broadcaster, 'companionDependencyRemoved');
     this.companionRemoved.emit(this.dependency);
   }
 
   removeDependency() {
+    this.telemetryService.broadcast(this.insightComponent.dependencyEditorComponent.broadcaster, 'browsedDependencyRemoved');
     this.service.removeDependency(this.dependency);
   }
 
