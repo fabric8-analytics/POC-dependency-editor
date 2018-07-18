@@ -131,7 +131,7 @@ export class DependencyEditorComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   blankMissionFlow(): void {
-    this.getDependencyInsights(this.blankResponse);
+    this.getDependencyInsights(this.blankResponse, true);
     // this.getCveData(this.blankResponse);
     this.getLicenseData(this.blankResponse);
   }
@@ -151,10 +151,10 @@ export class DependencyEditorComponent implements OnInit, OnChanges, OnDestroy {
       DependencySnapshot.DEP_FULL_ADDED.push(<ComponentInformationModel>this.depToAdd);
       this.isDepSelectedFromSearch = false;
     }
-    this.dependenciesAdded = DependencySnapshot.DEP_FULL_ADDED;
+    this.dependenciesAdded = _.uniq(DependencySnapshot.DEP_FULL_ADDED);
     this.depSnapshot.emit(DependencySnapshot.DEP_SNAPSHOT_ADDED);
     const payload = this.service.getPayload();
-    this.getDependencyInsights(payload);
+    this.getDependencyInsights(payload, false);
     this.emitLicenseChangeNeeded();
     this.emitSecurityChangeNeeded();
   }
@@ -206,15 +206,15 @@ export class DependencyEditorComponent implements OnInit, OnChanges, OnDestroy {
     this.licenseData = null;
   }
 
-  private setDependencies(result: ResultInformationModel) {
-    if (result && result.user_stack_info && result.user_stack_info.dependencies) {
-      this.dependencies = result.user_stack_info.dependencies;
+  private setDependencies(result: any) {
+    if (result) {
+      this.dependencies = _.uniq(result);
     }
   }
 
   private setCompanions(result: RecommendationsModel) {
     if (result && result.companion) {
-      this.companions = result.companion;
+      this.companions = _.uniq(result.companion);
     } else {
       this.companions = null;
     }
@@ -228,7 +228,7 @@ export class DependencyEditorComponent implements OnInit, OnChanges, OnDestroy {
 
   private setAlternate(result: RecommendationsModel) {
     if (result && result.alternate) {
-      this.alternate = result.alternate;
+      this.alternate = _.uniq(result.alternate);
     }
   }
 
@@ -261,7 +261,9 @@ export class DependencyEditorComponent implements OnInit, OnChanges, OnDestroy {
                   this.setCompanions(rec);
                   this.setAlternate(rec);
                 }
-                this.setDependencies(result);
+                if (result && result.user_stack_info && result.user_stack_info.dependencies) {
+                  this.setDependencies(result.user_stack_info.dependencies);
+                }
                 this.setLicenseData(result);
                 this.emitSecurityChangeNeeded();
               }
@@ -297,7 +299,7 @@ export class DependencyEditorComponent implements OnInit, OnChanges, OnDestroy {
       });
   }
 
-  private getDependencyInsights(payload: any) {
+  private getDependencyInsights(payload: any , isBlankMissionCall: boolean) {
     let subs: any = null;
     let rec: any = null;
     const interval: number = 5000;
@@ -305,6 +307,10 @@ export class DependencyEditorComponent implements OnInit, OnChanges, OnDestroy {
     let counter: number = 0;
     // const persist = false;
     // const urlToHit = this.getDepInsightsUrl + '?persist=' + persist;
+    if (isBlankMissionCall) {
+      this.setDependencies(payload._resolved);
+      DependencySnapshot.DEP_SNAPSHOT = payload._resolved;
+    }
     let observable: any = this.service
       .getDependencyData('DEPEDITORANALYSIS', payload);
     TimerObservable.create(0, interval)
@@ -342,10 +348,6 @@ export class DependencyEditorComponent implements OnInit, OnChanges, OnDestroy {
 
   private handleInitialLoads(resultInformationModel: ResultInformationModel): void {
     DependencySnapshot.ECOSYSTEM = resultInformationModel.user_stack_info.ecosystem;
-    DependencySnapshot.DEP_SNAPSHOT = resultInformationModel.user_stack_info.dependencies;
-    this.setDependencies(resultInformationModel);
-    this.setCompanions(resultInformationModel.recommendation);
-    this.setAlternate(resultInformationModel.recommendation);
     this.setLicenseData(resultInformationModel);
     this.emitSecurityChangeNeeded();
   }

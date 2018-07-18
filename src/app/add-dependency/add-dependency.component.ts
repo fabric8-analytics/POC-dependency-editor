@@ -394,7 +394,6 @@ export class AddDependencyComponent implements OnInit, OnDestroy, OnChanges {
         packs[name]['ecosystem'] = DependencySnapshot.ECOSYSTEM;
         this.masterTags.push(packs[name]);
       });
-      console.log('Master Tags', this.masterTags);
       this.tagZero = count;
     }
     this.categoryResult.forEach((i: any) => {

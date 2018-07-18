@@ -167,7 +167,7 @@ export class DependencyEditorService {
     getPayload() {
         const payload: any = {};
         const deps = DependencySnapshot.DEP_SNAPSHOT.concat(DependencySnapshot.DEP_SNAPSHOT_ADDED);
-        payload['_resolved'] = deps;
+        payload['_resolved'] = _.uniq(deps);
         payload['ecosystem'] = DependencySnapshot.ECOSYSTEM;
         payload['request_id'] = DependencySnapshot.REQUEST_ID;
         return payload;
