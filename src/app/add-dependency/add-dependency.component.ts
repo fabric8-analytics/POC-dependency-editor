@@ -181,18 +181,20 @@ export class AddDependencyComponent implements OnInit, OnDestroy, OnChanges {
         runtime = 'vertx';
       } else if (this.boosterInfo.runtime.id === 'spring-boot') {
         runtime = 'springboot';
-      } else if (this.boosterInfo.runtime.id === 'wildfly-swarm') {
-        runtime = 'wildflyswarm';
+      } else if (this.boosterInfo.runtime.id === 'thorntail') {
+        runtime = 'thorntail';
       }
-      this.service.getCategories(runtime)
-        .subscribe((response: any) => {
-          this.handleModalCategories(response['categories']);
-        }, (error: any) => {
-          // Handle server errors here
-          this.isLoading = false;
-          this.errorCategories =  this.errorMessageHandler.getErrorMessage(error.status);
-          console.log('error categories - ', this.errorCategories);
-      });
+      if (runtime) {
+        this.service.getCategories(runtime)
+          .subscribe((response: any) => {
+            this.handleModalCategories(response['categories']);
+          }, (error: any) => {
+            // Handle server errors here
+            this.isLoading = false;
+            this.errorCategories =  this.errorMessageHandler.getErrorMessage(error.status);
+            console.log('error categories - ', this.errorCategories);
+        });
+      }
     }
   }
 
