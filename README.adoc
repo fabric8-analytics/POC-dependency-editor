@@ -149,11 +149,15 @@ export ANALYTICS_LICENSE_URL='https://license-analysis.api.openshift.io/'
 export OSIO_AUTH_TOKEN='OSIO-TOKEN'
 
 ```
-To get OSIO-TOKEN folow below steps : 
-1: Login to [OSIO](https://openshift.io/)
-2: Go to profile view
-3: Edit Profile
-4: Copy token 
+To get OSIO-TOKEN follow below steps :
+
+1. Login to https://openshift.io/[OSIO]
+
+2. Go to profile view
+
+3. Edit Profile
+
+4. Copy token 
 
 == CSS and LESS
 
