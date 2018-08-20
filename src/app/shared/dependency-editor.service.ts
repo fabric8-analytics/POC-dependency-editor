@@ -1,14 +1,12 @@
 import {
     Injectable,
-    Inject,
     EventEmitter,
     Output
 } from '@angular/core';
 import {
-    Response,
-    Headers,
-    RequestOptions
-} from '@angular/http';
+    HttpClient,
+    HttpHeaders
+} from '@angular/common/http';
 import {
     DependencyEditorTokenProvider
 } from './depeditor-tokenprovider';
@@ -24,7 +22,6 @@ import * as _ from 'lodash';
 
 import {
     StackReportModel,
-    DependencySnapshotItem,
     ComponentInformationModel,
     CveResponseModel,
     DependencySearchItem,
@@ -36,8 +33,6 @@ import {
 import {
     DependencySnapshot
 } from '../utils/dependency-snapshot';
-
-import { HttpInterceptor } from '../shared/http-interceptor';
 
 @Injectable()
 export class DependencyEditorService {
@@ -57,7 +52,7 @@ export class DependencyEditorService {
     private URLS_HASH: any = {};
 
     constructor(
-        private http: HttpInterceptor,
+        private http: HttpClient,
         private tokenProvider: DependencyEditorTokenProvider,
         private urlProvider: URLProvider
     ) {
@@ -77,7 +72,7 @@ export class DependencyEditorService {
             let payload: any;
             payload = 'github_url=' + githubUrl + '&source=osio' + '&github_ref=' + githubRef;
             option.headers.append('Content-Type', 'application/x-www-form-urlencoded');
-            return this.http.post(url, payload, option)
+            return this.http.post<StackReportModel>(url, payload, option)
                 .map(this.extractData)
                 .map((data) => {
                     return data;
@@ -91,7 +86,7 @@ export class DependencyEditorService {
         let url: string = this.RECOMMENDER_API_BASE + `api/v1/stack-analyses/${stackId}`;
         return this.options.flatMap((option) => {
             let stackReport: StackReportModel = null;
-            return this.http.get(url, option)
+            return this.http.get<StackReportModel>(url, option)
                 .map(this.extractData)
                 .map((data) => {
                     stackReport = data;
@@ -105,7 +100,7 @@ export class DependencyEditorService {
 
         let url: string = this.RECOMMENDER_API_BASE + `api/v1/component-search/${component}`;
         return this.options.flatMap((option) => {
-            return this.http.get(url, option)
+            return this.http.get<StackReportModel>(url, option)
                 .map(this.extractData)
                 .map((data) => {
                     return data;
@@ -118,7 +113,7 @@ export class DependencyEditorService {
         if (!url) return;
 
         return this.options.flatMap((option) => {
-            return this.http.post(url, payload, option)
+            return this.http.post<StackReportModel>(url, payload, option)
                 .map(this.extractData)
                 .map((data: StackReportModel | CveResponseModel | LicenseStackAnalysisModel | any) => {
                     return data;
@@ -131,7 +126,7 @@ export class DependencyEditorService {
 
         let url: string = this.RECOMMENDER_API_BASE + `api/v1/categories/${runtime}`;
         return this.options.flatMap((option) => {
-            return this.http.get(url, option)
+            return this.http.get<StackReportModel>(url, option)
                 .map(this.extractData)
                 .map((data) => {
                     return data;
@@ -182,21 +177,22 @@ export class DependencyEditorService {
         this.dependencyRemoved.emit(objToEmit);
     }
 
-    private get options(): Observable<RequestOptions> {
-        let headers = new Headers();
+    private get options(): Observable<any> {
+        let headers = new HttpHeaders();
         return Observable.fromPromise(this.tokenProvider.token.then((token) => {
-            headers.append('Authorization', 'Bearer ' + token);
-            return new RequestOptions({
-                headers: headers
-            });
+            headers = headers.set('Authorization', 'Bearer ' + token);
+            return {
+                headers: headers,
+                observe: 'response'
+            };
         }));
     }
 
-    private extractData(res: Response) {
-        const body = res.json() || {};
+    private extractData(res: any): StackReportModel {
+        const body = res.body || {};
         body['statusCode'] = res.status;
         body['statusText'] = res.statusText;
-        return body as StackReportModel;
+        return body;
     }
 
     private checkForTrailingSlashes(url: string): string {

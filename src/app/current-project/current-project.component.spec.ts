@@ -3,12 +3,12 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { CurrentprojectComponent } from './current-project.component';
 import { CommonModule } from '@angular/common';
 import { AccordionModule } from 'ngx-bootstrap';
-import { HttpModule } from '@angular/http';
+import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { SecurityModule } from '../security/security.module';
 import { LicenseModule } from '../license/license.module';
 import { DependencyEditorService } from '../shared/dependency-editor.service';
-import { HttpInterceptor } from '../shared/http-interceptor';
+import { InterceptorService } from '../shared/interceptor-service';
 import { DependencyEditorTokenProvider } from '../shared/depeditor-tokenprovider';
 import { URLProvider } from '../shared/url-provider';
 
@@ -21,7 +21,7 @@ describe('CurrentprojectComponent', () => {
       imports: [
          CommonModule,
          AccordionModule.forRoot(),
-         HttpModule,
+         HttpClientModule,
          FormsModule,
          SecurityModule,
          LicenseModule
@@ -30,7 +30,7 @@ describe('CurrentprojectComponent', () => {
          CurrentprojectComponent
      ],
      providers: [
-       HttpInterceptor,
+       InterceptorService,
        DependencyEditorService,
        DependencyEditorTokenProvider,
        URLProvider

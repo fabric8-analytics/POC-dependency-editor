@@ -3,13 +3,13 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { CurrentprojectComponent } from '../current-project/current-project.component';
 import { CommonModule } from '@angular/common';
 import { AccordionModule } from 'ngx-bootstrap';
-import { HttpModule } from '@angular/http';
+import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { AlertBoxModule } from '../alert-box/alert-box.module';
-import { LicenseComponent } from '../license/license.component';
+import { LicenseComponent } from './license.component';
 
 import { DependencyEditorService } from '../shared/dependency-editor.service';
-import { HttpInterceptor } from '../shared/http-interceptor';
+import { InterceptorService } from '../shared/interceptor-service';
 import { URLProvider } from '../shared/url-provider';
 import { DependencyEditorTokenProvider } from '../shared/depeditor-tokenprovider';
 
@@ -22,7 +22,7 @@ describe('LicenseComponent', () => {
       imports: [
         CommonModule,
         AccordionModule.forRoot(),
-        HttpModule,
+        HttpClientModule,
         FormsModule,
         AlertBoxModule
      ],
@@ -30,7 +30,7 @@ describe('LicenseComponent', () => {
         LicenseComponent
      ],
      providers: [
-      HttpInterceptor,
+      InterceptorService,
       DependencyEditorService,
       URLProvider,
       DependencyEditorTokenProvider

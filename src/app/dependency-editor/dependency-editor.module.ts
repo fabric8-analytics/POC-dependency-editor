@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AccordionModule, TooltipModule } from 'ngx-bootstrap';
-import { HttpModule } from '@angular/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { DependencyEditorTokenProvider } from '../shared/depeditor-tokenprovider';
 import { ModalModule } from 'ngx-modal';
@@ -15,7 +15,7 @@ import { CurrentprojectModule } from '../current-project/current-project.module'
 import { DependencyEditorService } from '../shared/dependency-editor.service';
 import { URLProvider } from '../shared/url-provider';
 import { ErrorMessageHandler } from '../shared/error-message-handler';
-import { HttpInterceptor } from '../shared/http-interceptor';
+import { InterceptorService } from '../shared/interceptor-service';
 import { TelemetryService } from '../shared/telemetry.service';
 
 @NgModule({
@@ -23,7 +23,7 @@ import { TelemetryService } from '../shared/telemetry.service';
     CommonModule,
     AccordionModule.forRoot(),
     TooltipModule.forRoot(),
-    HttpModule,
+    HttpClientModule,
     FormsModule,
     ModalModule,
     InsightModule,
@@ -43,7 +43,12 @@ import { TelemetryService } from '../shared/telemetry.service';
     DependencyEditorTokenProvider,
     DependencyEditorService,
     ErrorMessageHandler,
-    HttpInterceptor,
+    InterceptorService,
+    {
+        provide: HTTP_INTERCEPTORS,
+        useClass: InterceptorService,
+        multi: true
+    },
     TelemetryService
  ]
 })

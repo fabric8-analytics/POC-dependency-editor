@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AccordionModule } from 'ngx-bootstrap';
-import { HttpModule } from '@angular/http';
+import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { AlertBoxModule } from '../alert-box/alert-box.module';
 import { LicenseComponent } from './license.component';
@@ -11,7 +11,7 @@ import { LicenseComponent } from './license.component';
  imports: [
     CommonModule,
     AccordionModule.forRoot(),
-    HttpModule,
+    HttpClientModule,
     FormsModule,
     AlertBoxModule
 ],

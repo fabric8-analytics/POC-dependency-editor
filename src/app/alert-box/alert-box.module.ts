@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HttpModule } from '@angular/http';
+import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 
 import { AlertBoxComponent } from './alert-box.component';
@@ -14,7 +14,7 @@ import { TooltipModule } from 'ngx-bootstrap/tooltip/tooltip.module';
     AlertLoaderModule,
     TooltipModule.forRoot(),
     CommonModule,
-    HttpModule,
+    HttpClientModule,
     FormsModule,
     ChartModule
 ],

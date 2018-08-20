@@ -3,11 +3,11 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { SecurityComponent } from './security.component';
 import { CommonModule } from '@angular/common';
 import { AccordionModule } from 'ngx-bootstrap';
-import { HttpModule } from '@angular/http';
+import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { AlertBoxModule } from '../alert-box/alert-box.module';
 import { DependencyEditorService } from '../shared/dependency-editor.service';
-import { HttpInterceptor } from '../shared/http-interceptor';
+import { InterceptorService } from '../shared/interceptor-service';
 import { DependencyEditorTokenProvider } from '../shared/depeditor-tokenprovider';
 import { URLProvider } from '../shared/url-provider';
 
@@ -20,7 +20,7 @@ describe('SecurityComponent', () => {
       imports: [
          CommonModule,
          AccordionModule.forRoot(),
-         HttpModule,
+         HttpClientModule,
          FormsModule,
          AlertBoxModule
      ],
@@ -28,7 +28,7 @@ describe('SecurityComponent', () => {
         SecurityComponent
      ],
      providers: [
-      HttpInterceptor,
+      InterceptorService,
       DependencyEditorService,
       DependencyEditorTokenProvider,
       URLProvider
