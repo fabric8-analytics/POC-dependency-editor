@@ -3,7 +3,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { DependencyEditorComponent } from './dependency-editor.component';
 import { CommonModule } from '@angular/common';
 import { AccordionModule, TooltipModule } from 'ngx-bootstrap';
-import { HttpModule } from '@angular/http';
+import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { ModalModule } from 'ngx-modal';
 import { InsightModule } from '../insights/insights.module';
@@ -15,7 +15,7 @@ import { URLProvider } from '../shared/url-provider';
 import { DependencyEditorTokenProvider } from '../shared/depeditor-tokenprovider';
 import { DependencyEditorService } from '../shared/dependency-editor.service';
 import { ErrorMessageHandler } from '../shared/error-message-handler';
-import { HttpInterceptor } from '../shared/http-interceptor';
+import { InterceptorService } from '../shared/interceptor-service';
 import { TelemetryService } from '../shared/telemetry.service';
 
 describe('DependencyEditorComponent', () => {
@@ -28,7 +28,7 @@ describe('DependencyEditorComponent', () => {
         CommonModule,
         AccordionModule.forRoot(),
         TooltipModule.forRoot(),
-        HttpModule,
+        HttpClientModule,
         FormsModule,
         ModalModule,
         AddDependencyModule,
@@ -43,7 +43,7 @@ describe('DependencyEditorComponent', () => {
      providers: [
         URLProvider,
         DependencyEditorTokenProvider,
-        HttpInterceptor,
+        InterceptorService,
         DependencyEditorService,
         ErrorMessageHandler,
         TelemetryService

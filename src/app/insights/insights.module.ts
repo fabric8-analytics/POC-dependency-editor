@@ -8,8 +8,8 @@ import {
     AccordionModule
 } from 'ngx-bootstrap';
 import {
-    HttpModule
-} from '@angular/http';
+    HttpClientModule
+} from '@angular/common/http';
 import {
     FormsModule
 } from '@angular/forms';
@@ -28,7 +28,7 @@ import { DependencyEditorService } from '../shared/dependency-editor.service';
         CommonModule,
         AccordionModule.forRoot(),
         TooltipModule.forRoot(),
-        HttpModule,
+        HttpClientModule,
         FormsModule,
         ListElementModule
     ],

@@ -1,13 +1,14 @@
-import { Http, Request, RequestOptions, RequestOptionsArgs, Response, XHRBackend } from '@angular/http';
+import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Rx';
+import { Observable } from 'rxjs';
 
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/observable/throw';
 import 'rxjs/add/operator/map';
+import { catchError } from 'rxjs/operators';
 
 @Injectable()
-export class HttpInterceptor extends Http {
+export class InterceptorService implements HttpInterceptor {
 
     private static ERROR_HASH: any = {
         '400': 'The request is not proper',
@@ -22,26 +23,28 @@ export class HttpInterceptor extends Http {
         'GENERIC': 'There was a problem fetching results, please try again'
     };
 
-    constructor(
-        backend: XHRBackend,
-        options: RequestOptions,
-        public http: Http
-    ) {
-        super(backend, options);
-    }
+    constructor() {}
 
-    public request(url: string|Request, options?: RequestOptionsArgs): Observable<Response> {
-        return super.request(url, options)
-                    .catch(this.handleError);
-    }
+    intercept(
+        request: HttpRequest<any>,
+        next: HttpHandler
+      ): Observable<HttpEvent<any>> {
+        return next.handle(request).pipe(
+            catchError((err) => {
+              if (err instanceof HttpErrorResponse) {
+                return this.handleError(err);
+              }
+            })
+          );
+      }
 
-    public handleError(error: Response): Observable<Response> {
+    public handleError(error: HttpErrorResponse): Observable<any> {
         console.log('Inside Interceptor', error);
         let formError: any = {
             status: error.status
         };
         // formError['message'] = HttpInterceptor.ERROR_HASH[error.status.toString()];
-        formError['message'] = HttpInterceptor.ERROR_HASH['GENERIC'];
+        formError['message'] = InterceptorService.ERROR_HASH['GENERIC'];
         return Observable.throw(formError);
     }
 

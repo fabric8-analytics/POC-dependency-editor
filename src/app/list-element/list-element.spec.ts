@@ -3,12 +3,12 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ListElementComponent } from './list-element.component';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { HttpModule } from '@angular/http';
+import { HttpClientModule } from '@angular/common/http';
 import { TooltipModule } from 'ngx-bootstrap';
 import { URLProvider } from '../shared/url-provider';
 import { DependencyEditorTokenProvider } from '../shared/depeditor-tokenprovider';
 import { DependencyEditorService } from '../shared/dependency-editor.service';
-import { HttpInterceptor } from '../shared/http-interceptor';
+import { InterceptorService } from '../shared/interceptor-service';
 import { TelemetryService } from '../shared/telemetry.service';
 import { InsightComponent } from '../insights/insights.component';
 
@@ -20,7 +20,7 @@ describe('ListElementComponent', () => {
     TestBed.configureTestingModule({
       imports: [
          CommonModule,
-         HttpModule,
+         HttpClientModule,
          FormsModule,
          TooltipModule.forRoot()
      ],
@@ -29,7 +29,7 @@ describe('ListElementComponent', () => {
      ],
       providers: [
         URLProvider,
-        HttpInterceptor,
+        InterceptorService,
         DependencyEditorTokenProvider,
         DependencyEditorService,
         TelemetryService,
