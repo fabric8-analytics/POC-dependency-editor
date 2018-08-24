@@ -29,7 +29,10 @@
     "package": "npm run build:lib && npm run pack:lib",
     "semantic-release": "semantic-release pre && npm run build && cp -r .git dist/fabric8-analytics-dependency-editor && npm publish dist/fabric8-analytics-dependency-editor"
   },
-  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fabric8-analytics/fabric8-analytics-dependency-editor.git"
+  },
   "dependencies": {
     "@angular/animations": "^6.1.0",
     "@angular/common": "^6.1.0",
