@@ -18,6 +18,10 @@ function release() {
     # Enable verbose output
     npm config set loglevel verbose
 
+    # check where we are
+    git branch -va
+    git remote -v
+
     # Build and Release dependency-editor (It will update the tag on github and push fabric8-analytics-dependency-editor to npmjs.org)
     npm run semantic-release
 }
