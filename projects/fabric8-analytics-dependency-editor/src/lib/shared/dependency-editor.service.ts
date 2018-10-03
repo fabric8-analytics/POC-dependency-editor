@@ -65,7 +65,7 @@ export class DependencyEditorService {
             // const payload = 'github_url=' + githubUrl;
             let payload: any;
             payload = 'github_url=' + githubUrl + '&source=osio' + '&github_ref=' + githubRef;
-            option.headers.append('Content-Type', 'application/x-www-form-urlencoded');
+            option.headers = option.headers.append('Content-Type', 'application/x-www-form-urlencoded');
             return this.http.post<StackReportModel>(url, payload, option).pipe(
                 map(this.extractData),
                 map((data) => {
